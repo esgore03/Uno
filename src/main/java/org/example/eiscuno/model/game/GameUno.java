@@ -76,10 +76,15 @@ public class GameUno implements IGameUno {
      */
     @Override
     public void haveSungOne(String playerWhoSang) {
-        if (playerWhoSang.equals("HUMAN_PLAYER")) {
-            machinePlayer.addCard(this.deck.takeCard());
-        } else {
-            humanPlayer.addCard(this.deck.takeCard());
+        if(humanPlayer.getCardsPlayer().size() == 1 || machinePlayer.getCardsPlayer().size() == 1) {
+            if (playerWhoSang.equals("HUMAN_PLAYER")) {
+                machinePlayer.addCard(this.deck.takeCard());
+            } else {
+                humanPlayer.addCard(this.deck.takeCard());
+            }
+        }
+        else{
+            System.out.println("Can't sing UNO.");
         }
     }
 
@@ -97,6 +102,25 @@ public class GameUno implements IGameUno {
 
         for (int i = 0; i < numVisibleCards; i++) {
             cards[i] = this.humanPlayer.getCard(posInitCardToShow + i);
+        }
+
+        return cards;
+    }
+
+    /**
+     * Retrieves the current visible cards of the machine player starting from a specific position.
+     *
+     * @param posInitCardToShow The initial position of the cards to show.
+     * @return An array of cards visible to the human player.
+     */
+    @Override
+    public Card[] getCurrentVisibleCardsMachinePlayer() {
+        int totalCards = this.machinePlayer.getCardsPlayer().size();
+        int numVisibleCards = Math.min(4, totalCards);
+        Card[] cards = new Card[numVisibleCards];
+
+        for (int i = 0; i < numVisibleCards; i++) {
+            cards[i] = this.machinePlayer.getCard(i);
         }
 
         return cards;

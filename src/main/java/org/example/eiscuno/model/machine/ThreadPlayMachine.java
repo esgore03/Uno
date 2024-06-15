@@ -1,17 +1,24 @@
 package org.example.eiscuno.model.machine;
 
+import javafx.application.Platform;
 import javafx.scene.image.ImageView;
+import org.example.eiscuno.controller.GameUnoController;
 import org.example.eiscuno.model.card.Card;
+import org.example.eiscuno.model.game.GameUno;
 import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
 
 public class ThreadPlayMachine extends Thread {
+    private GameUnoController gameUnoController;
+    private GameUno gameUno;
     private Table table;
     private Player machinePlayer;
     private ImageView tableImageView;
     private volatile boolean hasPlayerPlayed;
 
-    public ThreadPlayMachine(Table table, Player machinePlayer, ImageView tableImageView) {
+    public ThreadPlayMachine(GameUnoController gameUnoController, GameUno gameUno, Table table, Player machinePlayer, ImageView tableImageView) {
+        this.gameUnoController = gameUnoController;
+        this.gameUno = gameUno;
         this.table = table;
         this.machinePlayer = machinePlayer;
         this.tableImageView = tableImageView;
@@ -38,6 +45,8 @@ public class ThreadPlayMachine extends Thread {
         Card card = machinePlayer.getCard(index);
         table.addCardOnTheTable(card);
         tableImageView.setImage(card.getImage());
+
+        Platform.runLater(() -> gameUnoController.printCardsMachinePlayer());
     }
 
     public void setHasPlayerPlayed(boolean hasPlayerPlayed) {

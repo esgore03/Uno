@@ -2,9 +2,10 @@ package org.example.eiscuno.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.*;
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.deck.Deck;
 import org.example.eiscuno.model.game.GameUno;
@@ -12,17 +13,29 @@ import org.example.eiscuno.model.machine.ThreadPlayMachine;
 import org.example.eiscuno.model.machine.ThreadSingUNOMachine;
 import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
+import org.example.eiscuno.model.unoenum.EISCUnoEnum;
+import org.example.eiscuno.view.GameUnoStage;
+
+import static org.example.eiscuno.view.GameUnoStage.deleteInstance;
 
 /**
  * Controller class for the Uno game.
  */
 public class GameUnoController {
+    @FXML
+    BorderPane gameBorderPane;
 
     @FXML
     private GridPane gridPaneCardsMachine;
 
     @FXML
     private GridPane gridPaneCardsPlayer;
+
+    @FXML
+    private ImageView deckButtonImageView;
+
+    @FXML
+    private ImageView unoButtonImageView;
 
     @FXML
     private ImageView tableImageView;
@@ -42,16 +55,24 @@ public class GameUnoController {
      */
     @FXML
     public void initialize() {
+        setVisuals();
+
         initVariables();
         this.gameUno.startGame();
         printCardsHumanPlayer();
+        printCardsMachinePlayer();
 
-        threadSingUNOMachine = new ThreadSingUNOMachine(this.humanPlayer.getCardsPlayer());
+        threadSingUNOMachine = new ThreadSingUNOMachine(this.humanPlayer.getCardsPlayer(), gameUno);
         Thread t = new Thread(threadSingUNOMachine, "ThreadSingUNO");
         t.start();
 
-        threadPlayMachine = new ThreadPlayMachine(this.table, this.machinePlayer, this.tableImageView);
+        threadPlayMachine = new ThreadPlayMachine(this, this.gameUno, this.table, this.machinePlayer, this.tableImageView);
         threadPlayMachine.start();
+    }
+
+    private void setVisuals(){
+        deckButtonImageView.setImage(new Image(String.valueOf(getClass().getResource(EISCUnoEnum.DECK_OF_CARDS.getFilePath()))));
+        unoButtonImageView.setImage(new Image(String.valueOf(getClass().getResource(EISCUnoEnum.BUTTON_UNO.getFilePath()))));
     }
 
     /**
@@ -87,6 +108,22 @@ public class GameUnoController {
             });
 
             this.gridPaneCardsPlayer.add(cardImageView, i, 0);
+        }
+    }
+
+    /**
+     * Prints the machine player's cards on the grid pane.
+     */
+    public void printCardsMachinePlayer() {
+        this.gridPaneCardsMachine.getChildren().clear();
+        Card[] currentVisibleCardsMachinePlayer = this.gameUno.getCurrentVisibleCardsMachinePlayer();
+
+        for (int i = 0; i < currentVisibleCardsMachinePlayer.length; i++) {
+            ImageView cardImageView = new ImageView(new Image(String.valueOf(getClass().getResource(EISCUnoEnum.CARD_UNO.getFilePath()))));
+            cardImageView.setY(16);
+            cardImageView.setFitHeight(90);
+            cardImageView.setFitWidth(70);
+            this.gridPaneCardsMachine.add(cardImageView, i, 0);
         }
     }
 
@@ -148,6 +185,11 @@ public class GameUnoController {
      */
     @FXML
     void onHandleUno(ActionEvent event) {
-        // Implement logic to handle Uno event here
+        gameUno.haveSungOne("HUMAN_PLAYER");
+    }
+
+    @FXML
+    void onExitButtonClick(ActionEvent event){
+        GameUnoStage.deleteInstance();
     }
 }
