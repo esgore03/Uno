@@ -38,4 +38,12 @@ public class Table {
         }
         return this.cardsTable.get(this.cardsTable.size()-1);
     }
+
+    public boolean isEmpty() {
+        return cardsTable.isEmpty();
+    }
+
+    public ArrayList<Card> getCardsTable() {
+        return cardsTable;
+    }
 }

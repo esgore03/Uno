@@ -3,6 +3,7 @@ package org.example.eiscuno.model.deck;
 import org.example.eiscuno.model.unoenum.EISCUnoEnum;
 import org.example.eiscuno.model.card.Card;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Stack;
 
@@ -35,8 +36,6 @@ public class Deck {
                     cardEnum.name().equals("FOUR_WILD_DRAW") ||
                     cardEnum.name().equals("WILD")) {
                 Card card = new Card(cardEnum.getFilePath(), getCardValue(cardEnum.name()), getCardColor(cardEnum.name()));
-                System.out.println(card.getColor());
-                System.out.println(card.getValue());
                 deckOfCards.push(card);
             }
         }
@@ -92,7 +91,7 @@ public class Deck {
      */
     public Card takeCard() {
         if (deckOfCards.isEmpty()) {
-            throw new IllegalStateException("No hay más cartas en el mazo.");
+            throw new IllegalStateException("Deck is empty. Wait for it to be refilled.");
         }
         return deckOfCards.pop();
     }
@@ -104,5 +103,12 @@ public class Deck {
      */
     public boolean isEmpty() {
         return deckOfCards.isEmpty();
+    }
+
+    public void refillDeck(ArrayList<Card> allCardsInTableButLastOne){
+        for(Card card: allCardsInTableButLastOne){
+            deckOfCards.push(card);
+        }
+        Collections.shuffle(deckOfCards);
     }
 }

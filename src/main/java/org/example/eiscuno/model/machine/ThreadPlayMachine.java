@@ -40,39 +40,53 @@ public class ThreadPlayMachine extends Thread {
                 Random random = new Random();
                 double probability = 0.2; // Probability of a 20% chance it occurs.
                 boolean takeCard = random.nextDouble() < probability;
-                if(takeCard){
-                    try {
-                        gameUno.takeCard("MACHINE_PLAYER");
-                    } catch (IllegalStateException e) {
 
-                    }
+                if(takeCard){
+                    machineTakeCard();
                 }
                 else{
                     putCardOnTheTable();
                 }
+
                 hasPlayerPlayed = false;
-                eventManager.notifyListenersTurnUpdate(hasPlayerPlayed);
-                eventManager.notifyListenersCardsUpdate();
+                eventManager.notifyListenersPlayerTurnUpdate(hasPlayerPlayed);
+                eventManager.notifyListenersCardsMachinePlayerUpdate();
             }
         }
     }
 
     private void putCardOnTheTable(){
+        System.out.println("Machine player placed a card.");
         ArrayList<Card> cardsMachinePlayer = machinePlayer.getCardsPlayer();
         boolean validPlacement = false;
-        int i = 0;
-        for(Card card : cardsMachinePlayer){
+
+        for(int cardIndex = 0; cardIndex < cardsMachinePlayer.size(); cardIndex++){
             try {
-                i++;
+                Card card = machinePlayer.getCardsPlayer().get(cardIndex);
                 gameUno.playCard(card, "MACHINE_PLAYER");
-                machinePlayer.removeCard(i);
+                machinePlayer.removeCard(cardIndex);
                 tableImageView.setImage(card.getImage());
                 validPlacement = true;
+                break;
             } catch (UnoException ignored) {
             }
         }
+
         if(!validPlacement){
-            gameUno.takeCard("MACHINE_PLAYER");
+            machineTakeCard();
+        }
+    }
+
+    public void machineTakeCard(){
+        boolean cardTaken = false;
+
+        while(!cardTaken){
+            try {
+                gameUno.takeCard("MACHINE_PLAYER");
+                System.out.println("Machine player took a card.");
+                cardTaken = true;
+            } catch (IllegalStateException ignored) {
+            }
         }
     }
 

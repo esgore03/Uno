@@ -7,6 +7,8 @@ import org.example.eiscuno.model.observer.EventManager;
 import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
 
+import java.util.ArrayList;
+
 /**
  * Represents a game of Uno.
  * This class manages the game logic and interactions between players, deck, and the table.
@@ -71,7 +73,10 @@ public class GameUno implements IGameUno {
      */
     @Override
     public void playCard(Card card, String playerWhoPlays) throws UnoException {
-        try {
+        if(table.isEmpty()){
+            this.table.addCardOnTheTable(card);
+        }
+        else{
             Card currentCard = this.table.getCurrentCardOnTheTable();
             if(playerWhoPlays.equals("HUMAN_PLAYER")) {
                 if (cardCanBePlayed(card, currentCard)) {
@@ -88,8 +93,6 @@ public class GameUno implements IGameUno {
                     throw new UnoException();
                 }
             }
-        } catch(IndexOutOfBoundsException e){
-            this.table.addCardOnTheTable(card);
         }
     }
 
@@ -120,14 +123,14 @@ public class GameUno implements IGameUno {
         if (playerWhoSang.equals("HUMAN_PLAYER")) {
             if(machinePlayer.getCardsPlayer().size() == 1) {
                 machinePlayer.addCard(this.deck.takeCard());
-                eventManager.notifyListenersCardsUpdate();
+                eventManager.notifyListenersCardsMachinePlayerUpdate();
             }
             else{
                 System.out.println("Can't sing UNO.");
             }
         } else {
             humanPlayer.addCard(this.deck.takeCard());
-            eventManager.notifyListenersCardsUpdate();
+            eventManager.notifyListenersCardsHumanPlayerUpdate();
         }
     }
 
@@ -190,5 +193,21 @@ public class GameUno implements IGameUno {
     @Override
     public Boolean isGameOver() {
         return humanPlayer.getCardsPlayer().isEmpty() || machinePlayer.getCardsPlayer().isEmpty();
+    }
+
+    public void refillDeckOfCards(){
+        System.out.println("Deck has been refilled.");
+        ArrayList<Card> allCardsInTable = table.getCardsTable();
+        ArrayList<Card> allCardsInTableButLastOne = new ArrayList<>(allCardsInTable.subList(0, allCardsInTable.size() - 1));
+        deck.refillDeck(allCardsInTableButLastOne);
+    }
+
+    /**
+     * Retrieves the deck of the game.
+     *
+     * @return An instance of the Deck class representing the current deck of the game.
+     */
+    public Deck getDeck() {
+        return deck;
     }
 }

@@ -13,15 +13,21 @@ public class EventManager {
         listeners.remove(eventListener);
     }
 
-    public void notifyListenersTurnUpdate(boolean playerHasPlayed) {
+    public void notifyListenersPlayerTurnUpdate(boolean playerHasPlayed) {
         for (EventListener eventListener : listeners) {
-            eventListener.updateTurn(playerHasPlayed);
+            eventListener.updatePlayerTurn(playerHasPlayed);
         }
     }
 
-    public void notifyListenersCardsUpdate() {
+    public void notifyListenersCardsHumanPlayerUpdate() {
         for (EventListener eventListener : listeners) {
-            eventListener.updateCards();
+            eventListener.updateCardsHumanPlayer();
+        }
+    }
+
+    public void notifyListenersCardsMachinePlayerUpdate() {
+        for (EventListener eventListener : listeners) {
+            eventListener.updateCardsMachinePlayer();
         }
     }
 }

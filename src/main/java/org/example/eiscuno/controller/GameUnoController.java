@@ -7,6 +7,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import org.example.eiscuno.model.exception.UnoException;
+import org.example.eiscuno.model.machine.ThreadRefillDeck;
 import org.example.eiscuno.model.observer.EventManager;
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.deck.Deck;
@@ -51,6 +52,7 @@ public class GameUnoController{
     private boolean playerHasPlayed;
     private ThreadSingUNOMachine threadSingUNOMachine;
     private ThreadPlayMachine threadPlayMachine;
+    private ThreadRefillDeck threadRefillDeck;
 
     /**
      * Initializes the controller.
@@ -70,6 +72,9 @@ public class GameUnoController{
 
         threadPlayMachine = new ThreadPlayMachine(this.eventManager, this.gameUno, this.table, this.machinePlayer, this.tableImageView);
         threadPlayMachine.start();
+
+        threadRefillDeck = new ThreadRefillDeck(this.gameUno);
+        threadRefillDeck.start();
     }
 
     private void setVisuals(){
@@ -125,7 +130,7 @@ public class GameUnoController{
 
             this.gridPaneCardsPlayer.add(cardImageView, i, 0);
         }
-        System.out.println(humanPlayer.getCardsPlayer().size());
+        System.out.println("\nNumber of cards human player: " + humanPlayer.getCardsPlayer().size());
     }
 
     /**
@@ -143,7 +148,7 @@ public class GameUnoController{
             this.gridPaneCardsMachine.add(cardImageView, i, 0);
         }
 
-        System.out.println(machinePlayer.getCardsPlayer().size());
+        System.out.println("Number of cards machine player: " + machinePlayer.getCardsPlayer().size());
     }
 
     /**

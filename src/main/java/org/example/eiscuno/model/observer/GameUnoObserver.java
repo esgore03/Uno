@@ -11,13 +11,17 @@ public class GameUnoObserver implements EventListener {
     }
 
     @Override
-    public void updateTurn(boolean playerHasPlayed) {
+    public void updatePlayerTurn(boolean playerHasPlayed) {
         gameUnoController.setPlayerHasPlayed(playerHasPlayed);
     }
 
     @Override
-    public void updateCards(){
+    public void updateCardsMachinePlayer(){
         Platform.runLater(() -> gameUnoController.printCardsMachinePlayer());
+    }
+
+    @Override
+    public void updateCardsHumanPlayer(){
         Platform.runLater(() -> gameUnoController.printCardsHumanPlayer());
     }
 }
