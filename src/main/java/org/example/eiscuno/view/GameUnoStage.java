@@ -4,8 +4,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.example.eiscuno.model.unoenum.EISCUnoEnum;
 
@@ -36,7 +34,6 @@ public class GameUnoStage extends Stage {
 
         // Configuring the stage
         setTitle("EISC Uno"); // Sets the title of the stage
-        ImageView background = new ImageView(new Image(String.valueOf(getClass().getResource(EISCUnoEnum.BACKGROUND_UNO.getFilePath()))));
         getIcons().add(
                 new Image(
                         String.valueOf(getClass().getResource(EISCUnoEnum.FAVICON.getFilePath()))));

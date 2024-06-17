@@ -6,6 +6,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import org.example.eiscuno.model.exception.UnoException;
+import org.example.eiscuno.model.observer.EventManager;
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.deck.Deck;
 import org.example.eiscuno.model.game.GameUno;
@@ -14,14 +16,13 @@ import org.example.eiscuno.model.machine.ThreadSingUNOMachine;
 import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
 import org.example.eiscuno.model.unoenum.EISCUnoEnum;
+import org.example.eiscuno.model.observer.GameUnoObserver;
 import org.example.eiscuno.view.GameUnoStage;
-
-import static org.example.eiscuno.view.GameUnoStage.deleteInstance;
 
 /**
  * Controller class for the Uno game.
  */
-public class GameUnoController {
+public class GameUnoController{
     @FXML
     BorderPane gameBorderPane;
 
@@ -39,14 +40,15 @@ public class GameUnoController {
 
     @FXML
     private ImageView tableImageView;
-
+    private EventManager eventManager;
+    private GameUnoObserver gameUnoObserver;
     private Player humanPlayer;
     private Player machinePlayer;
     private Deck deck;
     private Table table;
     private GameUno gameUno;
     private int posInitCardToShow;
-
+    private boolean playerHasPlayed;
     private ThreadSingUNOMachine threadSingUNOMachine;
     private ThreadPlayMachine threadPlayMachine;
 
@@ -66,7 +68,7 @@ public class GameUnoController {
         Thread t = new Thread(threadSingUNOMachine, "ThreadSingUNO");
         t.start();
 
-        threadPlayMachine = new ThreadPlayMachine(this, this.gameUno, this.table, this.machinePlayer, this.tableImageView);
+        threadPlayMachine = new ThreadPlayMachine(this.eventManager, this.gameUno, this.table, this.machinePlayer, this.tableImageView);
         threadPlayMachine.start();
     }
 
@@ -79,18 +81,22 @@ public class GameUnoController {
      * Initializes the variables for the game.
      */
     private void initVariables() {
+        this.eventManager = new EventManager();
+        this.gameUnoObserver = new GameUnoObserver(this);
+        eventManager.addListener(this.gameUnoObserver);
         this.humanPlayer = new Player("HUMAN_PLAYER");
         this.machinePlayer = new Player("MACHINE_PLAYER");
         this.deck = new Deck();
         this.table = new Table();
-        this.gameUno = new GameUno(this.humanPlayer, this.machinePlayer, this.deck, this.table);
+        this.gameUno = new GameUno(this. eventManager, this.humanPlayer, this.machinePlayer, this.deck, this.table);
         this.posInitCardToShow = 0;
+        this.playerHasPlayed = false;
     }
 
     /**
      * Prints the human player's cards on the grid pane.
      */
-    private void printCardsHumanPlayer() {
+    public void printCardsHumanPlayer() {
         this.gridPaneCardsPlayer.getChildren().clear();
         Card[] currentVisibleCardsHumanPlayer = this.gameUno.getCurrentVisibleCardsHumanPlayer(this.posInitCardToShow);
 
@@ -99,16 +105,27 @@ public class GameUnoController {
             ImageView cardImageView = card.getCard();
 
             cardImageView.setOnMouseClicked((MouseEvent event) -> {
-                // Aqui deberian verificar si pueden en la tabla jugar esa carta
-                gameUno.playCard(card);
-                tableImageView.setImage(card.getImage());
-                humanPlayer.removeCard(findPosCardsHumanPlayer(card));
-                threadPlayMachine.setHasPlayerPlayed(true);
-                printCardsHumanPlayer();
+                if(!playerHasPlayed){
+                    // Aqui deberian verificar si pueden en la tabla jugar esa carta
+                    try {
+                        gameUno.playCard(card, "HUMAN_PLAYER");
+                        playerHasPlayed = true;
+                        tableImageView.setImage(card.getImage());
+                        humanPlayer.removeCard(findPosCardsHumanPlayer(card));
+                        threadPlayMachine.setHasPlayerPlayed(this.playerHasPlayed);
+                        printCardsHumanPlayer();
+                    } catch (UnoException e){
+                        System.out.println(e.getMessage());
+                    };
+                }
+                else{
+                    System.out.println("It's not your turn.");
+                }
             });
 
             this.gridPaneCardsPlayer.add(cardImageView, i, 0);
         }
+        System.out.println(humanPlayer.getCardsPlayer().size());
     }
 
     /**
@@ -125,6 +142,8 @@ public class GameUnoController {
             cardImageView.setFitWidth(70);
             this.gridPaneCardsMachine.add(cardImageView, i, 0);
         }
+
+        System.out.println(machinePlayer.getCardsPlayer().size());
     }
 
     /**
@@ -175,7 +194,20 @@ public class GameUnoController {
      */
     @FXML
     void onHandleTakeCard(ActionEvent event) {
-        // Implement logic to take a card here
+        if(!playerHasPlayed) {
+            try {
+                gameUno.takeCard("HUMAN_PLAYER");
+                printCardsHumanPlayer();
+                playerHasPlayed = true;
+                threadPlayMachine.setHasPlayerPlayed(this.playerHasPlayed);
+            } catch (IllegalStateException e) {
+                System.out.println(e.getMessage());
+                playerHasPlayed = false;
+            }
+        }
+        else{
+            System.out.println("It's not your turn.");
+        }
     }
 
     /**
@@ -188,8 +220,22 @@ public class GameUnoController {
         gameUno.haveSungOne("HUMAN_PLAYER");
     }
 
+    /**
+     * Handles the action of pressing the exit button.
+     *
+     * @param event the action event
+     */
     @FXML
     void onExitButtonClick(ActionEvent event){
         GameUnoStage.deleteInstance();
+    }
+
+    /**
+     * Sets the playerHasPlayed attribute to indicate whether the player has made a move.
+     *
+     * @param playerHasPlayed true if the player has made a move, false otherwise.
+     */
+    public void setPlayerHasPlayed(boolean playerHasPlayed) {
+        this.playerHasPlayed = playerHasPlayed;
     }
 }

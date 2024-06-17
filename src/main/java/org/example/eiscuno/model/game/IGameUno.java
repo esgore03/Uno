@@ -1,6 +1,7 @@
 package org.example.eiscuno.model.game;
 
 import org.example.eiscuno.model.card.Card;
+import org.example.eiscuno.model.exception.UnoException;
 import org.example.eiscuno.model.player.Player;
 
 /**
@@ -26,7 +27,7 @@ public interface IGameUno {
      *
      * @param card the card to be played
      */
-    void playCard(Card card);
+    void playCard(Card card, String playerWhoPlays) throws UnoException;
 
     /**
      * Handles the action when a player shouts "Uno".

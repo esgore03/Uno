@@ -1,9 +1,9 @@
 package org.example.eiscuno.model.unoenum;
 
 /**
- * Enum EISCUnoEnum
+ * Enum EISCUnoCardsEnum
  *
- * This enum represents the various file paths for the images used in the EISC Uno game.
+ * This enum represents the various file paths for the images used in the cards of the EISC Uno game.
  */
 public enum EISCUnoEnum {
     FAVICON("favicon.png"),
@@ -12,7 +12,6 @@ public enum EISCUnoEnum {
     BUTTON_UNO("images/button_uno.png"),
     CARD_UNO("cards-uno/card_uno.png"),
     DECK_OF_CARDS("cards-uno/deck_of_cards.png"),
-    WILD("cards-uno/wild.png"),
     TWO_WILD_DRAW_BLUE("cards-uno/2_wild_draw_blue.png"),
     TWO_WILD_DRAW_GREEN("cards-uno/2_wild_draw_green.png"),
     TWO_WILD_DRAW_YELLOW("cards-uno/2_wild_draw_yellow.png"),
@@ -22,10 +21,10 @@ public enum EISCUnoEnum {
     SKIP_YELLOW("cards-uno/skip_yellow.png"),
     SKIP_GREEN("cards-uno/skip_green.png"),
     SKIP_RED("cards-uno/skip_red.png"),
-    RESERVE_BLUE("cards-uno/reserve_blue.png"),
-    RESERVE_YELLOW("cards-uno/reserve_yellow.png"),
-    RESERVE_GREEN("cards-uno/reserve_green.png"),
-    RESERVE_RED("cards-uno/reserve_red.png"),
+    REVERSE_BLUE("cards-uno/reverse_blue.png"),
+    REVERSE_YELLOW("cards-uno/reverse_yellow.png"),
+    REVERSE_GREEN("cards-uno/reverse_green.png"),
+    REVERSE_RED("cards-uno/reverse_red.png"),
     GREEN_0("cards-uno/0_green.png"),
     GREEN_1("cards-uno/1_green.png"),
     GREEN_2("cards-uno/2_green.png"),
