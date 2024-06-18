@@ -78,8 +78,11 @@ public class GameUnoController{
     }
 
     private void setVisuals(){
+        String imageUrl = String.valueOf(getClass().getResource(EISCUnoEnum.BACKGROUND_UNO.getFilePath()));
+        String style = "-fx-background-image: url('" + imageUrl + "'); " + "-fx-background-size: cover;";
         deckButtonImageView.setImage(new Image(String.valueOf(getClass().getResource(EISCUnoEnum.DECK_OF_CARDS.getFilePath()))));
         unoButtonImageView.setImage(new Image(String.valueOf(getClass().getResource(EISCUnoEnum.BUTTON_UNO.getFilePath()))));
+        gameBorderPane.setStyle(style);
     }
 
     /**
