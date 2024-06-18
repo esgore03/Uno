@@ -104,13 +104,8 @@ public class GameUno implements IGameUno {
      *
      */
     private boolean cardCanBePlayed(Card card, Card currentCard){
-        if(card.getValue() == null || card.getColor() == null || currentCard.getValue() == null || currentCard.getColor() == null){
-            return true;
-        }
-        else{
-            return card.getValue().equals(currentCard.getValue())
-                    || card.getColor().equals(currentCard.getColor());
-        }
+        return card.getColor().equals("NON_COLOR") || card.getValue().equals(currentCard.getValue())
+                || card.getColor().equals(currentCard.getColor());
     }
 
     /**
@@ -195,12 +190,20 @@ public class GameUno implements IGameUno {
         return humanPlayer.getCardsPlayer().isEmpty() || machinePlayer.getCardsPlayer().isEmpty();
     }
 
-    public void refillDeckOfCards(){
+    /**
+     * Refills the deck of cards used for taking cards from the table.
+     * <p>
+     * This method retrieves all cards from the table except the last one,
+     * and then refills the deck with these cards.
+     * </p>
+     */
+    public void refillDeckOfCards() {
         System.out.println("Deck has been refilled.");
         ArrayList<Card> allCardsInTable = table.getCardsTable();
         ArrayList<Card> allCardsInTableButLastOne = new ArrayList<>(allCardsInTable.subList(0, allCardsInTable.size() - 1));
         deck.refillDeck(allCardsInTableButLastOne);
     }
+
 
     /**
      * Retrieves the deck of the game.

@@ -32,7 +32,7 @@ public class Player implements IPlayer {
     /**
      * Retrieves all cards currently held by the player.
      *
-     * @return An ArrayList containing all cards in the player's hand.
+     * @return an ArrayList containing all cards in the player's hand.
      */
     @Override
     public ArrayList<Card> getCardsPlayer() {
@@ -42,7 +42,7 @@ public class Player implements IPlayer {
     /**
      * Removes a card from the player's hand based on its index.
      *
-     * @param index The index of the card to remove.
+     * @param index the index of the card to remove.
      */
     @Override
     public void removeCard(int index) {
@@ -52,8 +52,8 @@ public class Player implements IPlayer {
     /**
      * Retrieves a card from the player's hand based on its index.
      *
-     * @param index The index of the card to retrieve.
-     * @return The card at the specified index in the player's hand.
+     * @param index the index of the card to retrieve.
+     * @return the card at the specified index in the player's hand.
      */
     @Override
     public Card getCard(int index){

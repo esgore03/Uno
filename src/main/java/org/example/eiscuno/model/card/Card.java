@@ -58,11 +58,30 @@ public class Card {
         return image;
     }
 
+    /**
+     * Gets the value of the card.
+     *
+     * @return the value of the card as a string
+     */
     public String getValue() {
         return value;
     }
 
+    /**
+     * Gets the color of the card.
+     *
+     * @return the color of the card as a string
+     */
     public String getColor() {
         return color;
+    }
+
+    /**
+     * Sets the color of the card.
+     *
+     * @param color the color to be set for the card
+     */
+    public void setColor(String color) {
+        this.color = color;
     }
 }

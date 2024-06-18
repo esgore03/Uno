@@ -29,7 +29,7 @@ public class Table {
     /**
      * Retrieves the current card on the table.
      *
-     * @return The card currently on the table.
+     * @return the card currently on the table.
      * @throws IndexOutOfBoundsException if there are no cards on the table.
      */
     public Card getCurrentCardOnTheTable() throws IndexOutOfBoundsException {
@@ -39,10 +39,18 @@ public class Table {
         return this.cardsTable.get(this.cardsTable.size()-1);
     }
 
+    /**
+     * Checks if the table has no cards in it.
+     *
+     * @return true if there are no cards on the table, false otherwise.
+     */
     public boolean isEmpty() {
         return cardsTable.isEmpty();
     }
 
+    /**
+     * Retrieves all the cards on the table.
+     */
     public ArrayList<Card> getCardsTable() {
         return cardsTable;
     }

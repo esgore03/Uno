@@ -70,7 +70,7 @@ public class GameUnoController{
         Thread t = new Thread(threadSingUNOMachine, "ThreadSingUNO");
         t.start();
 
-        threadPlayMachine = new ThreadPlayMachine(this.eventManager, this.gameUno, this.table, this.machinePlayer, this.tableImageView);
+        threadPlayMachine = new ThreadPlayMachine(this.eventManager, this.gameUno, this.machinePlayer, this.tableImageView);
         threadPlayMachine.start();
 
         threadRefillDeck = new ThreadRefillDeck(this.gameUno);

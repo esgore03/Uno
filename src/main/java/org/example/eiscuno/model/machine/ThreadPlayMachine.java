@@ -6,24 +6,20 @@ import org.example.eiscuno.model.observer.EventManager;
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.game.GameUno;
 import org.example.eiscuno.model.player.Player;
-import org.example.eiscuno.model.table.Table;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class ThreadPlayMachine extends Thread {
     private EventManager eventManager;
     private GameUno gameUno;
-    private Table table;
     private Player machinePlayer;
     private ImageView tableImageView;
     private volatile boolean hasPlayerPlayed;
 
-    public ThreadPlayMachine(EventManager eventManager, GameUno gameUno, Table table, Player machinePlayer, ImageView tableImageView) {
+    public ThreadPlayMachine(EventManager eventManager, GameUno gameUno, Player machinePlayer, ImageView tableImageView) {
         this.eventManager = eventManager;
         this.gameUno = gameUno;
-        this.table = table;
         this.machinePlayer = machinePlayer;
         this.tableImageView = tableImageView;
         this.hasPlayerPlayed = false;
