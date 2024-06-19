@@ -31,55 +31,83 @@ public class Deck {
                     cardEnum.name().startsWith("BLUE_") ||
                     cardEnum.name().startsWith("RED_") ||
                     cardEnum.name().startsWith("SKIP_") ||
-                    cardEnum.name().startsWith("REVERSE_") ||
+                    cardEnum.name().startsWith("RESERVE_") ||
                     cardEnum.name().startsWith("TWO_WILD_DRAW_") ||
                     cardEnum.name().equals("FOUR_WILD_DRAW") ||
                     cardEnum.name().equals("WILD")) {
                 Card card = new Card(cardEnum.getFilePath(), getCardValue(cardEnum.name()), getCardColor(cardEnum.name()));
                 deckOfCards.push(card);
+                // Print each card
+                System.out.println(card.getValue() + " " + card.getColor());
             }
         }
         Collections.shuffle(deckOfCards);
     }
 
+    /**
+     * Extracts the value from a card's name.
+     * <p>
+     * This method checks the card's name and returns the corresponding value.
+     * It supports numerical values (0-9), special action cards such as "REVERSE",
+     * "+2", "+4", "WILD", and "SKIP".
+     * </p>
+     *
+     * @param name the name of the card
+     * @return the value of the card as a string, or null if the name does not match any known card values
+     */
     private String getCardValue(String name) {
-        if (name.endsWith("0")){
+        if (name.endsWith("0")) {
             return "0";
-        } else if (name.endsWith("1")){
+        } else if (name.endsWith("1")) {
             return "1";
-        } else if (name.endsWith("2")){
+        } else if (name.endsWith("2")) {
             return "2";
-        } else if (name.endsWith("3")){
+        } else if (name.endsWith("3")) {
             return "3";
-        } else if (name.endsWith("4")){
+        } else if (name.endsWith("4")) {
             return "4";
-        } else if (name.endsWith("5")){
+        } else if (name.endsWith("5")) {
             return "5";
-        } else if (name.endsWith("6")){
+        } else if (name.endsWith("6")) {
             return "6";
-        } else if (name.endsWith("7")){
+        } else if (name.endsWith("7")) {
             return "7";
-        } else if (name.endsWith("8")){
+        } else if (name.endsWith("8")) {
             return "8";
-        } else if (name.endsWith("9")){
+        } else if (name.endsWith("9")) {
             return "9";
+        } else if (name.contains("REVERSE")) {
+            return "RESERVE";
+        } else if (name.contains("TWO_WILD_DRAW")) {
+            return "+2";
+        } else if (name.equals("FOUR_WILD_DRAW")) {
+            return "+4";
+        } else if (name.equals("WILD")) {
+            return "WILD";
+        } else if (name.contains("SKIP")) {
+            return "SKIP";
         } else {
             return null;
         }
-
     }
 
+    /**
+     * Extracts the color from a card's name.
+     *
+     * @param name the name of the card
+     * @return the color of the card as a string ("GREEN", "YELLOW", "BLUE", "RED") if the name contains any one of these colors, otherwise returns "NON_COLOR"
+     */
     private String getCardColor(String name){
-        if(name.startsWith("GREEN")){
+        if(name.contains("GREEN")){
             return "GREEN";
-        } else if(name.startsWith("YELLOW")){
+        } else if(name.contains("YELLOW")){
             return "YELLOW";
-        } else if(name.startsWith("BLUE")){
+        } else if(name.contains("BLUE")){
             return "BLUE";
-        } else if(name.startsWith("RED")){
+        } else if(name.contains("RED")){
             return "RED";
         } else {
-            return null;
+            return "NON_COLOR";
         }
     }
 
@@ -99,14 +127,19 @@ public class Deck {
     /**
      * Checks if the deck is empty.
      *
-     * @return true if the deck is empty, false otherwise
+     * @return true if the deck is empty, false otherwise.
      */
     public boolean isEmpty() {
         return deckOfCards.isEmpty();
     }
 
-    public void refillDeck(ArrayList<Card> allCardsInTableButLastOne){
-        for(Card card: allCardsInTableButLastOne){
+    /**
+     * Refills the deck on the board with the given cards and shuffles the deck.
+     *
+     * @param allCardsInTableButLastOne the list of cards to refill the deck, excluding the last card on the table.
+     */
+    public void refillDeck(ArrayList<Card> allCardsInTableButLastOne) {
+        for (Card card : allCardsInTableButLastOne) {
             deckOfCards.push(card);
         }
         Collections.shuffle(deckOfCards);
