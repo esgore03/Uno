@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="1ee8ff40-bbdd-4aec-a3d2-cf5cc45130ec" name="Changes" comment="Se implementa nuevo código para la inicialización de las cartas. Se hacen los respectivos cambios a la lógica de playCard() para soportarlos.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/deck/Deck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/deck/Deck.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -150,6 +151,8 @@
       <workItem from="1718611537915" duration="2859000" />
       <workItem from="1718743638472" duration="1174000" />
       <workItem from="1718744896573" duration="412000" />
+      <workItem from="1718763823767" duration="183000" />
+      <workItem from="1718786255970" duration="538000" />
     </task>
     <task id="LOCAL-00001" summary="Agregar iconos y imagenes. Intento de actualizar cartas de la máquina.">
       <option name="closed" value="true" />
@@ -191,7 +194,15 @@
       <option name="project" value="LOCAL" />
       <updated>1718744757442</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Se implementa nuevo código para la inicialización de las cartas. Se hacen los respectivos cambios a la lógica de playCard() para soportarlos.">
+      <option name="closed" value="true" />
+      <created>1718764000979</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1718764000979</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
