@@ -2,6 +2,8 @@ package org.example.eiscuno.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -19,11 +21,10 @@ import org.example.eiscuno.model.table.Table;
 import org.example.eiscuno.model.unoenum.EISCUnoEnum;
 import org.example.eiscuno.model.observer.GameUnoObserver;
 import org.example.eiscuno.view.GameUnoStage;
+import java.util.Optional;
+import java.util.Random;
 
-/**
- * Controller class for the Uno game.
- */
-public class GameUnoController{
+public class GameUnoController {
     @FXML
     BorderPane gameBorderPane;
 
@@ -41,6 +42,7 @@ public class GameUnoController{
 
     @FXML
     private ImageView tableImageView;
+
     private EventManager eventManager;
     private GameUnoObserver gameUnoObserver;
     private Player humanPlayer;
@@ -54,13 +56,9 @@ public class GameUnoController{
     private ThreadPlayMachine threadPlayMachine;
     private ThreadRefillDeck threadRefillDeck;
 
-    /**
-     * Initializes the controller.
-     */
     @FXML
     public void initialize() {
         setVisuals();
-
         initVariables();
         this.gameUno.startGame();
         printCardsHumanPlayer();
@@ -77,14 +75,11 @@ public class GameUnoController{
         threadRefillDeck.start();
     }
 
-    private void setVisuals(){
+    private void setVisuals() {
         deckButtonImageView.setImage(new Image(String.valueOf(getClass().getResource(EISCUnoEnum.DECK_OF_CARDS.getFilePath()))));
         unoButtonImageView.setImage(new Image(String.valueOf(getClass().getResource(EISCUnoEnum.BUTTON_UNO.getFilePath()))));
     }
 
-    /**
-     * Initializes the variables for the game.
-     */
     private void initVariables() {
         this.eventManager = new EventManager();
         this.gameUnoObserver = new GameUnoObserver(this);
@@ -93,14 +88,47 @@ public class GameUnoController{
         this.machinePlayer = new Player("MACHINE_PLAYER");
         this.deck = new Deck();
         this.table = new Table();
-        this.gameUno = new GameUno(this. eventManager, this.humanPlayer, this.machinePlayer, this.deck, this.table);
+        this.gameUno = new GameUno(this.eventManager, this.humanPlayer, this.machinePlayer, this.deck, this.table);
         this.posInitCardToShow = 0;
         this.playerHasPlayed = false;
     }
 
-    /**
-     * Prints the human player's cards on the grid pane.
-     */
+    private String showColorSelectionDialog() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Cambio de Color");
+        alert.setHeaderText("Selecciona un color");
+
+        ButtonType redButton = new ButtonType("Rojo");
+        ButtonType greenButton = new ButtonType("Verde");
+        ButtonType blueButton = new ButtonType("Azul");
+        ButtonType yellowButton = new ButtonType("Amarillo");
+
+        alert.getButtonTypes().setAll(redButton, greenButton, blueButton, yellowButton);
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent()) {
+            if (result.get() == redButton) {
+                return "RED";
+            } else if (result.get() == greenButton) {
+                return "GREEN";
+            } else if (result.get() == blueButton) {
+                return "BLUE";
+            } else if (result.get() == yellowButton) {
+                return "YELLOW";
+            }
+        }
+        return null;
+    }
+
+    private String getRandomColor() {
+        String[] colors = {"RED", "GGREEN", "BLUE", "YELLOW"};
+        Random random = new Random();
+        String color = colors[random.nextInt(colors.length)];
+        System.out.println("Machine has selected color " + color);
+        return color;
+    }
+
     public void printCardsHumanPlayer() {
         this.gridPaneCardsPlayer.getChildren().clear();
         Card[] currentVisibleCardsHumanPlayer = this.gameUno.getCurrentVisibleCardsHumanPlayer(this.posInitCardToShow);
@@ -110,20 +138,27 @@ public class GameUnoController{
             ImageView cardImageView = card.getCard();
 
             cardImageView.setOnMouseClicked((MouseEvent event) -> {
-                if(!playerHasPlayed){
-                    // Aqui deberian verificar si pueden en la tabla jugar esa carta
+                if (!playerHasPlayed) {
                     try {
                         gameUno.playCard(card, "HUMAN_PLAYER");
                         playerHasPlayed = true;
                         tableImageView.setImage(card.getImage());
                         humanPlayer.removeCard(findPosCardsHumanPlayer(card));
+
+                        if (card.isWildCard()) {
+                            String selectedColor = showColorSelectionDialog();
+                            if (selectedColor != null) {
+                                gameUno.setCurrentColor(selectedColor);
+                                System.out.println("Player has selected color " + selectedColor);
+                            }
+                        }
+
                         threadPlayMachine.setHasPlayerPlayed(this.playerHasPlayed);
                         printCardsHumanPlayer();
-                    } catch (UnoException e){
+                    } catch (UnoException e) {
                         System.out.println(e.getMessage());
-                    };
-                }
-                else{
+                    }
+                } else {
                     System.out.println("It's not your turn.");
                 }
             });
@@ -133,9 +168,6 @@ public class GameUnoController{
         System.out.println("\nNumber of cards human player: " + humanPlayer.getCardsPlayer().size());
     }
 
-    /**
-     * Prints the machine player's cards on the grid pane.
-     */
     public void printCardsMachinePlayer() {
         this.gridPaneCardsMachine.getChildren().clear();
         Card[] currentVisibleCardsMachinePlayer = this.gameUno.getCurrentVisibleCardsMachinePlayer();
@@ -151,12 +183,6 @@ public class GameUnoController{
         System.out.println("Number of cards machine player: " + machinePlayer.getCardsPlayer().size());
     }
 
-    /**
-     * Finds the position of a specific card in the human player's hand.
-     *
-     * @param card the card to find
-     * @return the position of the card, or -1 if not found
-     */
     private Integer findPosCardsHumanPlayer(Card card) {
         for (int i = 0; i < this.humanPlayer.getCardsPlayer().size(); i++) {
             if (this.humanPlayer.getCardsPlayer().get(i).equals(card)) {
@@ -166,11 +192,6 @@ public class GameUnoController{
         return -1;
     }
 
-    /**
-     * Handles the "Back" button action to show the previous set of cards.
-     *
-     * @param event the action event
-     */
     @FXML
     void onHandleBack(ActionEvent event) {
         if (this.posInitCardToShow > 0) {
@@ -179,11 +200,6 @@ public class GameUnoController{
         }
     }
 
-    /**
-     * Handles the "Next" button action to show the next set of cards.
-     *
-     * @param event the action event
-     */
     @FXML
     void onHandleNext(ActionEvent event) {
         if (this.posInitCardToShow < this.humanPlayer.getCardsPlayer().size() - 4) {
@@ -192,14 +208,9 @@ public class GameUnoController{
         }
     }
 
-    /**
-     * Handles the action of taking a card.
-     *
-     * @param event the action event
-     */
     @FXML
     void onHandleTakeCard(ActionEvent event) {
-        if(!playerHasPlayed) {
+        if (!playerHasPlayed) {
             try {
                 gameUno.takeCard("HUMAN_PLAYER");
                 printCardsHumanPlayer();
@@ -209,37 +220,21 @@ public class GameUnoController{
                 System.out.println(e.getMessage());
                 playerHasPlayed = false;
             }
-        }
-        else{
+        } else {
             System.out.println("It's not your turn.");
         }
     }
 
-    /**
-     * Handles the action of saying "Uno".
-     *
-     * @param event the action event
-     */
     @FXML
     void onHandleUno(ActionEvent event) {
         gameUno.haveSungOne("HUMAN_PLAYER");
     }
 
-    /**
-     * Handles the action of pressing the exit button.
-     *
-     * @param event the action event
-     */
     @FXML
-    void onExitButtonClick(ActionEvent event){
+    void onExitButtonClick(ActionEvent event) {
         GameUnoStage.deleteInstance();
     }
 
-    /**
-     * Sets the playerHasPlayed attribute to indicate whether the player has made a move.
-     *
-     * @param playerHasPlayed true if the player has made a move, false otherwise.
-     */
     public void setPlayerHasPlayed(boolean playerHasPlayed) {
         this.playerHasPlayed = playerHasPlayed;
     }
