@@ -41,6 +41,7 @@ public class GameUnoController{
 
     @FXML
     private ImageView tableImageView;
+    private ImageView exitButtonImageView;
     private EventManager eventManager;
     private GameUnoObserver gameUnoObserver;
     private Player humanPlayer;
@@ -82,6 +83,7 @@ public class GameUnoController{
         String style = "-fx-background-image: url('" + imageUrl + "'); " + "-fx-background-size: cover;";
         deckButtonImageView.setImage(new Image(String.valueOf(getClass().getResource(EISCUnoEnum.DECK_OF_CARDS.getFilePath()))));
         unoButtonImageView.setImage(new Image(String.valueOf(getClass().getResource(EISCUnoEnum.BUTTON_UNO.getFilePath()))));
+
         gameBorderPane.setStyle(style);
     }
 

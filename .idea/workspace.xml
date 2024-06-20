@@ -4,22 +4,25 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1ee8ff40-bbdd-4aec-a3d2-cf5cc45130ec" name="Changes" comment="Se termina lógica para tomar, decir UNO y funcionamiento de los threads que simulan la máquina.">
+    <list default="true" id="1ee8ff40-bbdd-4aec-a3d2-cf5cc45130ec" name="Changes" comment="Se implementa nuevo código para la inicialización de las cartas. Se hacen los respectivos cambios a la lógica de playCard() para soportarlos.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/controller/GameUnoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/controller/GameUnoController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/card/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/card/Card.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/deck/Deck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/deck/Deck.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/exception/UnoException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/exception/UnoException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/game/GameUno.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/game/GameUno.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/game/IGameUno.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/game/IGameUno.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/machine/ThreadPlayMachine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/machine/ThreadPlayMachine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/machine/ThreadRefillDeck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/machine/ThreadRefillDeck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/machine/ThreadSingUNOMachine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/machine/ThreadSingUNOMachine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/observer/EventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/observer/EventListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/observer/EventManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/observer/EventManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/observer/GameUnoObserver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/observer/GameUnoObserver.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/player/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/player/Player.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/table/Table.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/table/Table.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/unoenum/EISCUnoEnum.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/eiscuno/cards-uno/wild_draw_4.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/eiscuno/cards-uno/4_wild_draw.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/eiscuno/cards-uno/wild_draw_blue_2.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/eiscuno/cards-uno/2_wild_draw_blue.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/eiscuno/cards-uno/wild_draw_green_2.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/eiscuno/cards-uno/2_wild_draw_green.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/eiscuno/cards-uno/wild_draw_red_2.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/eiscuno/cards-uno/2_wild_draw_red.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/eiscuno/cards-uno/wild_draw_yellow_2.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/eiscuno/cards-uno/2_wild_draw_yellow.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/view/GameUnoStage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/view/GameUnoStage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/eiscuno/game-uno-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/eiscuno/game-uno-view.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +84,7 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;jmga&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;egr&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/fsvc1/Downloads/eisc-uno-9447407b856a4f593bd96d95eecff3c38250f94f/eisc-uno-9447407b856a4f593bd96d95eecff3c38250f94f&quot;,
     &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
@@ -162,7 +165,10 @@
       <workItem from="1718574328381" duration="13961000" />
       <workItem from="1718609334597" duration="2164000" />
       <workItem from="1718611537915" duration="2859000" />
-      <workItem from="1718743638472" duration="652000" />
+      <workItem from="1718743638472" duration="1174000" />
+      <workItem from="1718744896573" duration="412000" />
+      <workItem from="1718769171537" duration="3587000" />
+      <workItem from="1718848067518" duration="2759000" />
     </task>
     <task id="LOCAL-00001" summary="Agregar iconos y imagenes. Intento de actualizar cartas de la máquina.">
       <option name="closed" value="true" />
@@ -196,7 +202,15 @@
       <option name="project" value="LOCAL" />
       <updated>1718613387293</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Se implementa nuevo código para la inicialización de las cartas. Se hacen los respectivos cambios a la lógica de playCard() para soportarlos.">
+      <option name="closed" value="true" />
+      <created>1718744757442</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1718744757442</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -207,6 +221,7 @@
     <MESSAGE value="Agregar iconos y imagenes. Intento de actualizar cartas de la máquina." />
     <MESSAGE value="Avances en lógica del juego" />
     <MESSAGE value="Se termina lógica para tomar, decir UNO y funcionamiento de los threads que simulan la máquina." />
-    <option name="LAST_COMMIT_MESSAGE" value="Se termina lógica para tomar, decir UNO y funcionamiento de los threads que simulan la máquina." />
+    <MESSAGE value="Se implementa nuevo código para la inicialización de las cartas. Se hacen los respectivos cambios a la lógica de playCard() para soportarlos." />
+    <option name="LAST_COMMIT_MESSAGE" value="Se implementa nuevo código para la inicialización de las cartas. Se hacen los respectivos cambios a la lógica de playCard() para soportarlos." />
   </component>
 </project>
