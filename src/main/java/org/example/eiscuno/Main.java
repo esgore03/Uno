@@ -15,7 +15,7 @@ public class Main extends Application {
      * The main method of the application.
      *
      * @param args the command line arguments
-     */
+     */Add
     public static void main(String[] args) {
         launch(args);
     }
