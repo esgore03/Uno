@@ -2,15 +2,19 @@ package org.example.eiscuno.model.game;
 
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.deck.Deck;
+import org.example.eiscuno.model.exception.UnoException;
+import org.example.eiscuno.model.observer.EventManager;
 import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
+
+import java.util.ArrayList;
 
 /**
  * Represents a game of Uno.
  * This class manages the game logic and interactions between players, deck, and the table.
  */
 public class GameUno implements IGameUno {
-
+    private EventManager eventManager;
     private Player humanPlayer;
     private Player machinePlayer;
     private Deck deck;
@@ -24,7 +28,8 @@ public class GameUno implements IGameUno {
      * @param deck          The deck of cards used in the game.
      * @param table         The table where cards are placed during the game.
      */
-    public GameUno(Player humanPlayer, Player machinePlayer, Deck deck, Table table) {
+    public GameUno(EventManager eventManager, Player humanPlayer, Player machinePlayer, Deck deck, Table table) {
+        this.eventManager = eventManager;
         this.humanPlayer = humanPlayer;
         this.machinePlayer = machinePlayer;
         this.deck = deck;
@@ -63,10 +68,44 @@ public class GameUno implements IGameUno {
      * Places a card on the table during the game.
      *
      * @param card The card to be placed on the table.
+     * @param playerWhoPlays The player who is playing the card.
+     *
      */
     @Override
-    public void playCard(Card card) {
-        this.table.addCardOnTheTable(card);
+    public void playCard(Card card, String playerWhoPlays) throws UnoException {
+        if(table.isEmpty()){
+            this.table.addCardOnTheTable(card);
+        }
+        else{
+            Card currentCard = this.table.getCurrentCardOnTheTable();
+            if(playerWhoPlays.equals("HUMAN_PLAYER")) {
+                if (cardCanBePlayed(card, currentCard)) {
+                    this.table.addCardOnTheTable(card);
+                } else {
+                    throw new UnoException("Can't place this card");
+                }
+            }
+            else{
+                if (cardCanBePlayed(card, currentCard)) {
+                    this.table.addCardOnTheTable(card);
+                }
+                else{
+                    throw new UnoException();
+                }
+            }
+        }
+    }
+
+    /**
+     * Checks if a card can be played.
+     *
+     * @param card The card to be played.
+     * @param currentCard The current card on the table.
+     *
+     */
+    private boolean cardCanBePlayed(Card card, Card currentCard){
+        return card.getColor().equals("NON_COLOR") || card.getValue().equals(currentCard.getValue())
+                || card.getColor().equals(currentCard.getColor());
     }
 
     /**
@@ -77,9 +116,30 @@ public class GameUno implements IGameUno {
     @Override
     public void haveSungOne(String playerWhoSang) {
         if (playerWhoSang.equals("HUMAN_PLAYER")) {
-            machinePlayer.addCard(this.deck.takeCard());
+            if(machinePlayer.getCardsPlayer().size() == 1) {
+                machinePlayer.addCard(this.deck.takeCard());
+                eventManager.notifyListenersCardsMachinePlayerUpdate();
+            }
+            else{
+                System.out.println("Can't sing UNO.");
+            }
         } else {
             humanPlayer.addCard(this.deck.takeCard());
+            eventManager.notifyListenersCardsHumanPlayerUpdate();
+        }
+    }
+
+    /**
+     * Gives a card to the player who is taking it.
+     *
+     * @param playerWhoTakes The player who is taking the card.
+     */
+    public void takeCard(String playerWhoTakes){
+        if (playerWhoTakes.equals("HUMAN_PLAYER")) {
+            humanPlayer.addCard(this.deck.takeCard());
+        }
+        else{
+            machinePlayer.addCard(this.deck.takeCard());
         }
     }
 
@@ -103,12 +163,54 @@ public class GameUno implements IGameUno {
     }
 
     /**
+     * Retrieves the current visible cards of the machine player starting from a specific position.
+     *
+     * @return An array of cards visible to the human player.
+     */
+    @Override
+    public Card[] getCurrentVisibleCardsMachinePlayer() {
+        int totalCards = this.machinePlayer.getCardsPlayer().size();
+        int numVisibleCards = Math.min(4, totalCards);
+        Card[] cards = new Card[numVisibleCards];
+
+        for (int i = 0; i < numVisibleCards; i++) {
+            cards[i] = this.machinePlayer.getCard(i);
+        }
+
+        return cards;
+    }
+
+    /**
      * Checks if the game is over.
      *
-     * @return True if the deck is empty, indicating the game is over; otherwise, false.
+     * @return True if any of the player's have no cards left.
      */
     @Override
     public Boolean isGameOver() {
-        return null;
+        return humanPlayer.getCardsPlayer().isEmpty() || machinePlayer.getCardsPlayer().isEmpty();
+    }
+
+    /**
+     * Refills the deck of cards used for taking cards from the table.
+     * <p>
+     * This method retrieves all cards from the table except the last one,
+     * and then refills the deck with these cards.
+     * </p>
+     */
+    public void refillDeckOfCards() {
+        System.out.println("Deck has been refilled.");
+        ArrayList<Card> allCardsInTable = table.getCardsTable();
+        ArrayList<Card> allCardsInTableButLastOne = new ArrayList<>(allCardsInTable.subList(0, allCardsInTable.size() - 1));
+        deck.refillDeck(allCardsInTableButLastOne);
+    }
+
+
+    /**
+     * Retrieves the deck of the game.
+     *
+     * @return An instance of the Deck class representing the current deck of the game.
+     */
+    public Deck getDeck() {
+        return deck;
     }
 }

@@ -1,18 +1,25 @@
 package org.example.eiscuno.model.machine;
 
 import javafx.scene.image.ImageView;
+import org.example.eiscuno.model.exception.UnoException;
+import org.example.eiscuno.model.observer.EventManager;
 import org.example.eiscuno.model.card.Card;
+import org.example.eiscuno.model.game.GameUno;
 import org.example.eiscuno.model.player.Player;
-import org.example.eiscuno.model.table.Table;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 public class ThreadPlayMachine extends Thread {
-    private Table table;
+    private EventManager eventManager;
+    private GameUno gameUno;
     private Player machinePlayer;
     private ImageView tableImageView;
     private volatile boolean hasPlayerPlayed;
 
-    public ThreadPlayMachine(Table table, Player machinePlayer, ImageView tableImageView) {
-        this.table = table;
+    public ThreadPlayMachine(EventManager eventManager, GameUno gameUno, Player machinePlayer, ImageView tableImageView) {
+        this.eventManager = eventManager;
+        this.gameUno = gameUno;
         this.machinePlayer = machinePlayer;
         this.tableImageView = tableImageView;
         this.hasPlayerPlayed = false;
@@ -26,18 +33,57 @@ public class ThreadPlayMachine extends Thread {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                // Aqui iria la logica de colocar la carta
-                putCardOnTheTable();
+                Random random = new Random();
+                double probability = 0.2; // Probability of a 20% chance it occurs.
+                boolean takeCard = random.nextDouble() < probability;
+
+                if(takeCard){
+                    machineTakeCard();
+                }
+                else{
+                    putCardOnTheTable();
+                }
+
                 hasPlayerPlayed = false;
+                eventManager.notifyListenersPlayerTurnUpdate(hasPlayerPlayed);
+                eventManager.notifyListenersCardsMachinePlayerUpdate();
             }
         }
     }
 
     private void putCardOnTheTable(){
-        int index = (int) (Math.random() * machinePlayer.getCardsPlayer().size());
-        Card card = machinePlayer.getCard(index);
-        table.addCardOnTheTable(card);
-        tableImageView.setImage(card.getImage());
+        System.out.println("Machine player placed a card.");
+        ArrayList<Card> cardsMachinePlayer = machinePlayer.getCardsPlayer();
+        boolean validPlacement = false;
+
+        for(int cardIndex = 0; cardIndex < cardsMachinePlayer.size(); cardIndex++){
+            try {
+                Card card = machinePlayer.getCardsPlayer().get(cardIndex);
+                gameUno.playCard(card, "MACHINE_PLAYER");
+                machinePlayer.removeCard(cardIndex);
+                tableImageView.setImage(card.getImage());
+                validPlacement = true;
+                break;
+            } catch (UnoException ignored) {
+            }
+        }
+
+        if(!validPlacement){
+            machineTakeCard();
+        }
+    }
+
+    public void machineTakeCard(){
+        boolean cardTaken = false;
+
+        while(!cardTaken){
+            try {
+                gameUno.takeCard("MACHINE_PLAYER");
+                System.out.println("Machine player took a card.");
+                cardTaken = true;
+            } catch (IllegalStateException ignored) {
+            }
+        }
     }
 
     public void setHasPlayerPlayed(boolean hasPlayerPlayed) {
