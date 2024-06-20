@@ -26,9 +26,9 @@ public class ThreadPlayMachine extends Thread {
     }
 
     public void run() {
-        while (true){
-            if(hasPlayerPlayed){
-                try{
+        while (true) {
+            if (hasPlayerPlayed) {
+                try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -37,10 +37,9 @@ public class ThreadPlayMachine extends Thread {
                 double probability = 0.2; // Probability of a 20% chance it occurs.
                 boolean takeCard = random.nextDouble() < probability;
 
-                if(takeCard){
+                if (takeCard) {
                     machineTakeCard();
-                }
-                else{
+                } else {
                     putCardOnTheTable();
                 }
 
@@ -51,32 +50,39 @@ public class ThreadPlayMachine extends Thread {
         }
     }
 
-    private void putCardOnTheTable(){
+    private void putCardOnTheTable() {
         System.out.println("Machine player placed a card.");
         ArrayList<Card> cardsMachinePlayer = machinePlayer.getCardsPlayer();
         boolean validPlacement = false;
 
-        for(int cardIndex = 0; cardIndex < cardsMachinePlayer.size(); cardIndex++){
+        for (int cardIndex = 0; cardIndex < cardsMachinePlayer.size(); cardIndex++) {
             try {
                 Card card = machinePlayer.getCardsPlayer().get(cardIndex);
                 gameUno.playCard(card, "MACHINE_PLAYER");
                 machinePlayer.removeCard(cardIndex);
                 tableImageView.setImage(card.getImage());
+
+                if (card.isWildCard()) {
+                    String randomColor = getRandomColor();
+                    gameUno.setCurrentColor(randomColor);
+                    System.out.println("Machine has selected color " + randomColor);
+                }
+
                 validPlacement = true;
                 break;
             } catch (UnoException ignored) {
             }
         }
 
-        if(!validPlacement){
+        if (!validPlacement) {
             machineTakeCard();
         }
     }
 
-    public void machineTakeCard(){
+    public void machineTakeCard() {
         boolean cardTaken = false;
 
-        while(!cardTaken){
+        while (!cardTaken) {
             try {
                 gameUno.takeCard("MACHINE_PLAYER");
                 System.out.println("Machine player took a card.");
@@ -84,6 +90,12 @@ public class ThreadPlayMachine extends Thread {
             } catch (IllegalStateException ignored) {
             }
         }
+    }
+
+    private String getRandomColor() {
+        String[] colors = {"RED", "GREEN", "BLUE", "YELLOW"};
+        Random random = new Random();
+        return colors[random.nextInt(colors.length)];
     }
 
     public void setHasPlayerPlayed(boolean hasPlayerPlayed) {
