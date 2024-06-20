@@ -73,25 +73,17 @@ public class GameUno implements IGameUno {
      */
     @Override
     public void playCard(Card card, String playerWhoPlays) throws UnoException {
-        if(table.isEmpty()){
+        if (table.isEmpty()) {
             this.table.addCardOnTheTable(card);
+            applySpecialCardEffect(card, playerWhoPlays);
         }
-        else{
+        else {
             Card currentCard = this.table.getCurrentCardOnTheTable();
-            if(playerWhoPlays.equals("HUMAN_PLAYER")) {
-                if (cardCanBePlayed(card, currentCard)) {
-                    this.table.addCardOnTheTable(card);
-                } else {
-                    throw new UnoException("Can't place this card");
-                }
-            }
-            else{
-                if (cardCanBePlayed(card, currentCard)) {
-                    this.table.addCardOnTheTable(card);
-                }
-                else{
-                    throw new UnoException();
-                }
+            if (cardCanBePlayed(card, currentCard)) {
+                this.table.addCardOnTheTable(card);
+                applySpecialCardEffect(card, playerWhoPlays);
+            } else {
+                throw new UnoException("Can't place this card");
             }
         }
     }
@@ -103,9 +95,42 @@ public class GameUno implements IGameUno {
      * @param currentCard The current card on the table.
      *
      */
-    private boolean cardCanBePlayed(Card card, Card currentCard){
+    private boolean cardCanBePlayed(Card card, Card currentCard) {
         return card.getColor().equals("NON_COLOR") || card.getValue().equals(currentCard.getValue())
                 || card.getColor().equals(currentCard.getColor());
+    }
+
+    /**
+     * Applies the effect of a special card.
+     *
+     * @param card The card being played.
+     * @param playerWhoPlays The player who played the card.
+     * @throws UnoException if an error occurs while applying the card effect.
+     */
+    private void applySpecialCardEffect(Card card, String playerWhoPlays) throws UnoException {
+        Player currentPlayer = playerWhoPlays.equals("HUMAN_PLAYER") ? humanPlayer : machinePlayer;
+        Player nextPlayer = playerWhoPlays.equals("HUMAN_PLAYER") ? machinePlayer : humanPlayer;
+
+        switch (card.getValue()) {
+            case "+2":
+                eatCard(nextPlayer, 2);
+                // El siguiente jugador pierde su turno
+                break;
+            case "+4":
+                eatCard(nextPlayer, 4);
+                // El siguiente jugador pierde su turno
+                // Aquí podrías agregar lógica para cambiar el color si lo deseas
+                break;
+            case "SKIP":
+                // El siguiente jugador pierde su turno
+                break;
+            case "REVERSE":
+                // Invertir el orden del juego
+                // Aquí podrías agregar lógica para invertir el orden del juego
+                break;
+            default:
+                break;
+        }
     }
 
     /**
@@ -203,7 +228,6 @@ public class GameUno implements IGameUno {
         ArrayList<Card> allCardsInTableButLastOne = new ArrayList<>(allCardsInTable.subList(0, allCardsInTable.size() - 1));
         deck.refillDeck(allCardsInTableButLastOne);
     }
-
 
     /**
      * Retrieves the deck of the game.
