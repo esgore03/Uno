@@ -101,11 +101,10 @@ public class GameUnoController {
         threadRefillDeck = new ThreadRefillDeck(this.gameUno);
         threadRefillDeck.start();
 
-        threadEndGame = new ThreadEndGame();
+        threadEndGame = new ThreadEndGame(this, this.gameUno);
+        threadEndGame.start();
 
         gameUnoObserver.setGameUnoController(this);
-        threadEndGame.setGameUnoController(this);
-        threadEndGame.setGameUno(this.gameUno);
         threadPlayMachineObserver.setThreadPlayMachine(threadPlayMachine);
     }
 

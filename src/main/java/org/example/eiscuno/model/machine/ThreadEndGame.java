@@ -9,6 +9,11 @@ public class ThreadEndGame  extends Thread{
     GameUnoController gameUnoController;
     GameUno gameUno;
 
+     public ThreadEndGame(GameUnoController gameUnoController, GameUno gameUno){
+         this.gameUnoController = gameUnoController;
+         this.gameUno = gameUno;
+     }
+
     @Override
     public void run(){
         while(true){
@@ -18,7 +23,10 @@ public class ThreadEndGame  extends Thread{
                 e.printStackTrace();
             }
             try{
+                System.out.println("Humano ganó: " + gameUno.didHumanWin());
+                System.out.println(gameUno.didMachineWin());
                 if(gameUno.didHumanWin()){
+                    System.out.println("Humano ganó: " + gameUno.didHumanWin());
                     gameUnoController.win();
                 }
                 else if(gameUno.didMachineWin()){
