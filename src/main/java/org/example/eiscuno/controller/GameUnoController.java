@@ -130,7 +130,7 @@ public class GameUnoController {
         this.machinePlayer = new Player("MACHINE_PLAYER");
         this.deck = new Deck();
         this.table = new Table();
-        this.gameUno = new GameUno(this.eventManager, this.humanPlayer, this.machinePlayer, this.deck, this.table);
+        this.gameUno = new GameUno(this, this.eventManager, this.humanPlayer, this.machinePlayer, this.deck, this.table);
         this.posInitCardToShow = 0;
         this.playerHasPlayed = false;
     }
@@ -151,19 +151,11 @@ public class GameUnoController {
                     try {
                         gameUno.playCard(card, "HUMAN_PLAYER");
                         System.out.println("Human player placed a card.");
-                        if(gameUno.didHumanWin()){
-                            win();
-                        }
-                        else if(gameUno.didMachineWin()){
-                            lose();
-                        }
                         tableImageView.setImage(card.getImage());
                         humanPlayer.removeCard(findPosCardsHumanPlayer(card));
                         printCardsHumanPlayer();
                     } catch (UnoException e){
                         System.out.println(e.getMessage());
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
                     }
                 }
                 else{
@@ -283,7 +275,7 @@ public class GameUnoController {
      * Closes the current stage and opens the win stage.
      * @throws IOException if an error occurs while opening the win stage.
      */
-    private void win() throws IOException {
+    public void win() throws IOException {
         this.stage = (Stage) this.backButton.getScene().getWindow();
         this.stage.close();
         WinStage.getInstance();
@@ -293,7 +285,7 @@ public class GameUnoController {
      * Closes the current stage and opens the lose stage.
      * @throws IOException if an error occurs while opening the lose stage.
      */
-    private void lose() throws IOException{
+    public void lose() throws IOException{
         this.stage = (Stage) this.backButton.getScene().getWindow();
         this.stage.close();
         LoseStage.getInstance();
