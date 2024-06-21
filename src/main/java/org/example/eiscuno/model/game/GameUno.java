@@ -22,7 +22,6 @@ public class GameUno implements IGameUno {
     private Deck deck; // Deck of Uno cards
     private Table table; // Table where cards are placed during the game
     private String currentTableCardColor; // Current color of the top card on the table
-    private GameUnoController gameUnoController;
 
     /**
      * Constructs a new instance of GameUno with the specified parameters.
@@ -33,7 +32,7 @@ public class GameUno implements IGameUno {
      * @param deck          the deck of Uno cards
      * @param table         the table where cards are placed during the game
      */
-    public GameUno(GameUnoController gameUnoController, EventManager eventManager, Player humanPlayer, Player machinePlayer, Deck deck, Table table) {
+    public GameUno(EventManager eventManager, Player humanPlayer, Player machinePlayer, Deck deck, Table table) {
         this.eventManager = eventManager;
         this.humanPlayer = humanPlayer;
         this.machinePlayer = machinePlayer;
@@ -94,16 +93,6 @@ public class GameUno implements IGameUno {
                 if (cardCanBePlayed(card, currentCard)) {
                     this.table.addCardOnTheTable(card);
                     applySpecialCardEffect(card, playerWhoPlays);
-                    try{
-                        if(didHumanWin()){
-                            gameUnoController.win();
-                        }
-                        else if(didMachineWin()){
-                            gameUnoController.lose();
-                        }
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
                 } else {
                     throw new UnoException("Can't place this card");
                 }

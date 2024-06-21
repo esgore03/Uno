@@ -9,6 +9,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.example.eiscuno.model.exception.UnoException;
+import org.example.eiscuno.model.machine.ThreadEndGame;
 import org.example.eiscuno.model.machine.ThreadRefillDeck;
 import org.example.eiscuno.model.observer.EventManager;
 import org.example.eiscuno.model.card.Card;
@@ -75,6 +76,7 @@ public class GameUnoController {
     private ThreadSingUNOMachine threadSingUNOMachine;
     private ThreadPlayMachine threadPlayMachine;
     private ThreadRefillDeck threadRefillDeck;
+    private ThreadEndGame threadEndGame;
 
     /**
      * Initializes the controller.
@@ -99,7 +101,11 @@ public class GameUnoController {
         threadRefillDeck = new ThreadRefillDeck(this.gameUno);
         threadRefillDeck.start();
 
+        threadEndGame = new ThreadEndGame();
+
         gameUnoObserver.setGameUnoController(this);
+        threadEndGame.setGameUnoController(this);
+        threadEndGame.setGameUno(this.gameUno);
         threadPlayMachineObserver.setThreadPlayMachine(threadPlayMachine);
     }
 
@@ -130,7 +136,7 @@ public class GameUnoController {
         this.machinePlayer = new Player("MACHINE_PLAYER");
         this.deck = new Deck();
         this.table = new Table();
-        this.gameUno = new GameUno(this, this.eventManager, this.humanPlayer, this.machinePlayer, this.deck, this.table);
+        this.gameUno = new GameUno(this.eventManager, this.humanPlayer, this.machinePlayer, this.deck, this.table);
         this.posInitCardToShow = 0;
         this.playerHasPlayed = false;
     }
