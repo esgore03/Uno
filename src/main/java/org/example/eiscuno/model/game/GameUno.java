@@ -1,6 +1,5 @@
 package org.example.eiscuno.model.game;
 
-import org.example.eiscuno.SelectColorDialog;
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.deck.Deck;
 import org.example.eiscuno.model.exception.UnoException;
@@ -10,14 +9,27 @@ import org.example.eiscuno.model.table.Table;
 
 import java.util.ArrayList;
 
+/**
+ * Represents a game of Uno.
+ * Manages the game logic including players, deck, table, and game events.
+ */
 public class GameUno implements IGameUno {
-    private EventManager eventManager;
-    private Player humanPlayer;
-    private Player machinePlayer;
-    private Deck deck;
-    private Table table;
-    private String currentTableCardColor;
+    private EventManager eventManager; // Manages game events
+    private Player humanPlayer; // Human player in the game
+    private Player machinePlayer; // AI player in the game
+    private Deck deck; // Deck of Uno cards
+    private Table table; // Table where cards are placed during the game
+    private String currentTableCardColor; // Current color of the top card on the table
 
+    /**
+     * Constructs a new instance of GameUno with the specified parameters.
+     *
+     * @param eventManager   the event manager for managing game events
+     * @param humanPlayer    the human player in the game
+     * @param machinePlayer  the AI player in the game
+     * @param deck           the deck of Uno cards
+     * @param table          the table where cards are placed during the game
+     */
     public GameUno(EventManager eventManager, Player humanPlayer, Player machinePlayer, Deck deck, Table table) {
         this.eventManager = eventManager;
         this.humanPlayer = humanPlayer;
@@ -26,6 +38,24 @@ public class GameUno implements IGameUno {
         this.table = table;
         currentTableCardColor = null;
     }
+
+    /**
+     * Constructs a new instance of GameUno with the specified parameters.
+     * This constructor is intended for unit testing purposes.
+     *
+     * @param humanPlayer    the human player in the game
+     * @param machinePlayer  the AI player in the game
+     * @param deck           the deck of Uno cards
+     * @param table          the table where cards are placed during the game
+     */
+    public GameUno(Player humanPlayer, Player machinePlayer, Deck deck, Table table) {
+        this.humanPlayer = humanPlayer;
+        this.machinePlayer = machinePlayer;
+        this.deck = deck;
+        this.table = table;
+        currentTableCardColor = null;
+    }
+
 
     @Override
     public void startGame() {
@@ -38,6 +68,12 @@ public class GameUno implements IGameUno {
         }
     }
 
+    /**
+     * Distributes cards from the deck to a player.
+     *
+     * @param playerWhoEats  the player who receives the cards (either "MACHINE_PLAYER" or "HUMAN_PLAYER")
+     * @param numberOfCards  the number of cards to distribute
+     */
     public void eatCard(String playerWhoEats, int numberOfCards) {
         if(deck.size() < numberOfCards){
             refillDeckOfCards();
@@ -57,25 +93,41 @@ public class GameUno implements IGameUno {
 
     @Override
     public void playCard(Card card, String playerWhoPlays) throws UnoException {
-        if (table.isEmpty()) {
-            this.table.addCardOnTheTable(card);
-            applySpecialCardEffect(card, playerWhoPlays);
-        } else {
-            Card currentCard = this.table.getCurrentCardOnTheTable();
-            if (cardCanBePlayed(card, currentCard)) {
+        if(!didHumanWin() && !didMachineWin()){
+            if (table.isEmpty()) {
                 this.table.addCardOnTheTable(card);
                 applySpecialCardEffect(card, playerWhoPlays);
             } else {
-                throw new UnoException("Can't place this card");
+                Card currentCard = this.table.getCurrentCardOnTheTable();
+                if (cardCanBePlayed(card, currentCard)) {
+                    this.table.addCardOnTheTable(card);
+                    applySpecialCardEffect(card, playerWhoPlays);
+                } else {
+                    throw new UnoException("Can't place this card");
+                }
             }
         }
     }
 
+    /**
+     * Checks if a card can be played.
+     *
+     * @param card         the card to be played
+     * @param currentCard  the current card on the table
+     * @return true if the card can be played, false otherwise
+     */
     private boolean cardCanBePlayed(Card card, Card currentCard) {
-        return card.getColor().equals("NON_COLOR") || card.getValue().equals(currentCard.getValue())
+        return card.getColor().equals("NON_COLOR") || currentTableCardColor.equals("NON_COLOR") || card.getValue().equals(currentCard.getValue())
                 || card.getColor().equals(currentTableCardColor != null ? currentTableCardColor : currentCard.getColor());
     }
 
+    /**
+     * Applies the special effects of playing a card and updates the game state accordingly.
+     *
+     * @param card           the card being played
+     * @param playerWhoPlays the player who is playing the card (either "HUMAN_PLAYER" or "MACHINE_PLAYER")
+     * @throws UnoException if an error occurs during card play
+     */
     private void applySpecialCardEffect(Card card, String playerWhoPlays) throws UnoException {
         String playerWhoEats;
 
@@ -87,18 +139,19 @@ public class GameUno implements IGameUno {
                     currentTableCardColor = card.getColor();
                     eatCard(playerWhoEats, 2);
                     eventManager.notifyListenersPlayerTurnUpdate(true);
+                    eventManager.notifyListenersCardsMachinePlayerUpdate();
                     break;
                 case "+4":
-                    currentTableCardColor = SelectColorDialog.display();
+                    currentTableCardColor = card.getColor();
                     eatCard(playerWhoEats, 4);
                     eventManager.notifyListenersPlayerTurnUpdate(true);
+                    eventManager.notifyListenersCardsMachinePlayerUpdate();
                     break;
                 case "SKIP", "REVERSE":
                     currentTableCardColor = card.getColor();
                     eventManager.notifyListenersPlayerTurnUpdate(false);
                     break;
                 case "WILD":
-                    currentTableCardColor = SelectColorDialog.display();
                     eventManager.notifyListenersPlayerTurnUpdate(true);
                     break;
                 default:
@@ -115,19 +168,19 @@ public class GameUno implements IGameUno {
                     currentTableCardColor = card.getColor();
                     eatCard(playerWhoEats, 2);
                     eventManager.notifyListenersPlayerTurnUpdate(false);
-
+                    eventManager.notifyListenersCardsHumanPlayerUpdate();
                     break;
                 case "+4":
-                    currentTableCardColor = SelectColorDialog.display();
+                    currentTableCardColor = card.getColor();
                     eatCard(playerWhoEats, 4);
                     eventManager.notifyListenersPlayerTurnUpdate(false);
+                    eventManager.notifyListenersCardsHumanPlayerUpdate();
                     break;
                 case "SKIP", "REVERSE":
                     currentTableCardColor = card.getColor();
                     eventManager.notifyListenersPlayerTurnUpdate(true);
                     break;
                 case "WILD":
-                    currentTableCardColor = SelectColorDialog.display();
                     eventManager.notifyListenersPlayerTurnUpdate(false);
                     break;
                 default:
@@ -162,6 +215,12 @@ public class GameUno implements IGameUno {
         }
     }
 
+    /**
+     * Takes a card from the deck and adds it to the specified player's hand.
+     * Also resets the Uno protection status of the player.
+     *
+     * @param playerWhoTakes the player who is taking the card ("HUMAN_PLAYER" or "MACHINE_PLAYER")
+     */
     public void takeCardPlayer(String playerWhoTakes) {
         if (playerWhoTakes.equals("HUMAN_PLAYER")) {
             this.humanPlayer.addCard(this.deck.takeCard());
@@ -199,10 +258,19 @@ public class GameUno implements IGameUno {
     }
 
     @Override
-    public Boolean isGameOver() {
-        return humanPlayer.getCardsPlayer().isEmpty() || machinePlayer.getCardsPlayer().isEmpty();
+    public Boolean didHumanWin() {
+        return humanPlayer.getCardsPlayer().isEmpty();
     }
 
+    @Override
+    public Boolean didMachineWin() {
+        return machinePlayer.getCardsPlayer().isEmpty();
+    }
+
+    /**
+     * Refills the deck of cards by adding all cards from the table back into the deck.
+     * This method is called when the deck runs out of cards during gameplay.
+     */
     public void refillDeckOfCards() {
         System.out.println("Deck has been refilled.");
         ArrayList<Card> allCardsInTable = table.getCardsTable();
@@ -210,15 +278,13 @@ public class GameUno implements IGameUno {
         deck.refillDeck(allCardsInTableButLastOne);
     }
 
+    /**
+     * Gets the deck of cards used in the game.
+     *
+     * @return the deck of cards
+     */
     public Deck getDeck() {
         return deck;
     }
 
-    public String getCurrentTableCardColor() {
-        return currentTableCardColor;
-    }
-
-    public void setCurrentTableCardColor(String color) {
-        this.currentTableCardColor = color;
-    }
 }

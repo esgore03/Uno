@@ -11,12 +11,7 @@
             <Image url="@images/background_end.gif" />
          </image>
       </ImageView>
-      <ImageView fitHeight="68.0" fitWidth="326.0" layoutX="137.0" layoutY="26.0">
-         <image>
-            <Image url="@images/text_win.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="62.0" fitWidth="332.0" layoutX="134.0" layoutY="29.0">
+      <ImageView fx:id="loseImageView" fitHeight="62.0" fitWidth="332.0" layoutX="134.0" layoutY="29.0">
          <image>
             <Image url="@images/text_lose.png" />
          </image>

@@ -62,14 +62,20 @@ public class Player implements IPlayer {
         return cardsPlayer.get(index);
     }
 
-    public String getTypePlayer() {
-        return typePlayer;
-    }
-
+    /**
+     * Sets the protected by UNO status for the player.
+     *
+     * @param protectedByUno true if the player is protected by UNO, false otherwise
+     */
     public void setProtectedByUno(boolean protectedByUno) {
         isProtectedByUno = protectedByUno;
     }
 
+    /**
+     * Checks if the player is protected by UNO.
+     *
+     * @return true if the player is protected by UNO, false otherwise
+     */
     public boolean isProtectedByUno() {
         return isProtectedByUno;
     }

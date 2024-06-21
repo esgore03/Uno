@@ -11,15 +11,6 @@ public class GameUnoControllerObserver implements EventListener {
     private GameUnoController gameUnoController;
 
     /**
-     * Constructs a new GameUnoObserver with a GameUnoController instance.
-     *
-     * @param gameUnoController the controller for managing Uno game events
-     */
-    public GameUnoControllerObserver(GameUnoController gameUnoController) {
-        this.gameUnoController = gameUnoController;
-    }
-
-    /**
      * Updates the player's turn status in the associated GameUnoController.
      *
      * @param playerHasPlayed {@code true} if the player has played, {@code false} otherwise
@@ -45,5 +36,9 @@ public class GameUnoControllerObserver implements EventListener {
     @Override
     public void updateCardsHumanPlayer() {
         Platform.runLater(() -> gameUnoController.printCardsHumanPlayer());
+    }
+
+    public void setGameUnoController(GameUnoController gameUnoController) {
+        this.gameUnoController = gameUnoController;
     }
 }

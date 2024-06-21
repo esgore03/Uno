@@ -60,7 +60,6 @@ public class ThreadSingUNOMachine implements Runnable {
      */
     private void hasOneCardTheHumanPlayer() {
         if (cardsPlayer.size() == 1) {
-            System.out.println("Machine says: UNO");
             gameUno.haveSungOne("MACHINE_PLAYER");
         }
     }
@@ -73,7 +72,6 @@ public class ThreadSingUNOMachine implements Runnable {
      */
     private void hasOneCardTheMachinePlayer() {
         if (cardsMachine.size() == 1) {
-            System.out.println("Machine protects itself from UNO");
             this.machinePlayer.setProtectedByUno(true);
         }
     }

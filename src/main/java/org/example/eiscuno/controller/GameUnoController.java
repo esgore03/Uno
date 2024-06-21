@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 import org.example.eiscuno.model.exception.UnoException;
 import org.example.eiscuno.model.machine.ThreadRefillDeck;
 import org.example.eiscuno.model.observer.EventManager;
@@ -14,16 +15,21 @@ import org.example.eiscuno.model.deck.Deck;
 import org.example.eiscuno.model.game.GameUno;
 import org.example.eiscuno.model.machine.ThreadPlayMachine;
 import org.example.eiscuno.model.machine.ThreadSingUNOMachine;
+import org.example.eiscuno.model.observer.ThreadPlayMachineObserver;
 import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
 import org.example.eiscuno.model.unoenum.EISCUnoEnum;
 import org.example.eiscuno.model.observer.GameUnoControllerObserver;
+import org.example.eiscuno.view.LoseStage;
+import org.example.eiscuno.view.WinStage;
 import org.example.eiscuno.view.GameUnoStage;
+
+import java.io.IOException;
 
 /**
  * Controller class for the Uno game.
  */
-public class GameUnoController{
+public class GameUnoController {
     @FXML
     BorderPane gameBorderPane;
 
@@ -52,6 +58,7 @@ public class GameUnoController{
     private ImageView tableImageView;
     private EventManager eventManager;
     private GameUnoControllerObserver gameUnoObserver;
+    private ThreadPlayMachineObserver threadPlayMachineObserver;
     private Player humanPlayer;
     private Player machinePlayer;
     private Deck deck;
@@ -59,6 +66,7 @@ public class GameUnoController{
     private GameUno gameUno;
     private int posInitCardToShow;
     private boolean playerHasPlayed;
+    private Stage stage;
     private ThreadSingUNOMachine threadSingUNOMachine;
     private ThreadPlayMachine threadPlayMachine;
     private ThreadRefillDeck threadRefillDeck;
@@ -71,21 +79,28 @@ public class GameUnoController{
         setVisuals();
 
         initVariables();
+
         this.gameUno.startGame();
         printCardsHumanPlayer();
         printCardsMachinePlayer();
+
+        threadPlayMachine = new ThreadPlayMachine(this.eventManager, this.gameUno, this.machinePlayer, this.tableImageView);
+        threadPlayMachine.start();
 
         threadSingUNOMachine = new ThreadSingUNOMachine(this.humanPlayer.getCardsPlayer(), this.machinePlayer, gameUno);
         Thread t = new Thread(threadSingUNOMachine, "ThreadSingUNO");
         t.start();
 
-        threadPlayMachine = new ThreadPlayMachine(this.eventManager, this.gameUno, this.machinePlayer, this.tableImageView);
-        threadPlayMachine.start();
-
         threadRefillDeck = new ThreadRefillDeck(this.gameUno);
         threadRefillDeck.start();
+
+        gameUnoObserver.setGameUnoController(this);
+        threadPlayMachineObserver.setThreadPlayMachine(threadPlayMachine);
     }
 
+    /**
+     * Initializes the visuals of the game.
+     */
     private void setVisuals(){
         String imageUrl = String.valueOf(getClass().getResource(EISCUnoEnum.BACKGROUND_UNO.getFilePath()));
         String style = "-fx-background-image: url('" + imageUrl + "'); " + "-fx-background-size: cover;";
@@ -101,14 +116,17 @@ public class GameUnoController{
      * Initializes the variables for the game.
      */
     private void initVariables() {
+        stage = (Stage) this.tableImageView.getScene().getWindow();
         this.eventManager = new EventManager();
-        this.gameUnoObserver = new GameUnoControllerObserver(this);
+        this.gameUnoObserver = new GameUnoControllerObserver();
+        this.threadPlayMachineObserver = new ThreadPlayMachineObserver();
         eventManager.addListener(this.gameUnoObserver);
+        eventManager.addListener(this.threadPlayMachineObserver);
         this.humanPlayer = new Player("HUMAN_PLAYER");
         this.machinePlayer = new Player("MACHINE_PLAYER");
         this.deck = new Deck();
         this.table = new Table();
-        this.gameUno = new GameUno(this. eventManager, this.humanPlayer, this.machinePlayer, this.deck, this.table);
+        this.gameUno = new GameUno(this.eventManager, this.humanPlayer, this.machinePlayer, this.deck, this.table);
         this.posInitCardToShow = 0;
         this.playerHasPlayed = false;
     }
@@ -128,13 +146,21 @@ public class GameUnoController{
                 if(!playerHasPlayed){
                     try {
                         gameUno.playCard(card, "HUMAN_PLAYER");
+                        System.out.println("Human player placed a card.");
+                        if(gameUno.didHumanWin()){
+                            win();
+                        }
+                        else if(gameUno.didMachineWin()){
+                            lose();
+                        }
                         tableImageView.setImage(card.getImage());
                         humanPlayer.removeCard(findPosCardsHumanPlayer(card));
-                        threadPlayMachine.setHasPlayerPlayed(this.playerHasPlayed);
                         printCardsHumanPlayer();
                     } catch (UnoException e){
                         System.out.println(e.getMessage());
-                    };
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
                 else{
                     System.out.println("It's not your turn.");
@@ -143,7 +169,7 @@ public class GameUnoController{
 
             this.gridPaneCardsPlayer.add(cardImageView, i, 0);
         }
-        System.out.println("\nNumber of cards human player: " + humanPlayer.getCardsPlayer().size());
+        System.out.println("Number of cards human player: " + humanPlayer.getCardsPlayer().size());
     }
 
     /**
@@ -216,6 +242,7 @@ public class GameUnoController{
             try {
                 gameUno.takeCardPlayer("HUMAN_PLAYER");
                 printCardsHumanPlayer();
+                System.out.println("Human player took a card.");
                 playerHasPlayed = true;
                 threadPlayMachine.setHasPlayerPlayed(this.playerHasPlayed);
             } catch (IllegalStateException e) {
@@ -246,6 +273,24 @@ public class GameUnoController{
     @FXML
     void onExitButtonClick(ActionEvent event){
         GameUnoStage.deleteInstance();
+    }
+
+    /**
+     * Closes the current stage and opens the win stage.
+     * @throws IOException if an error occurs while opening the win stage.
+     */
+    private void win() throws IOException {
+        this.stage.close();
+        WinStage.getInstance();
+    }
+
+    /**
+     * Closes the current stage and opens the lose stage.
+     * @throws IOException if an error occurs while opening the lose stage.
+     */
+    private void lose() throws IOException{
+        this.stage.close();
+        LoseStage.getInstance();
     }
 
     /**
