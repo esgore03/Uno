@@ -6,9 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="1ee8ff40-bbdd-4aec-a3d2-cf5cc45130ec" name="Changes" comment="Se termina el juego UNO.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/machine/ThreadEndGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/machine/ThreadEndGame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/eiscuno/model/game/GameUnoTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/example/eiscuno/model/game/GameUnoTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -107,7 +105,7 @@
       <recent name="org.example.eiscuno.model.game" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.GameUnoTest">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.eiscuno.Main" />
       <module name="eisc-uno" />
@@ -144,8 +142,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.GameUnoTest" />
         <item itemvalue="Application.Main" />
+        <item itemvalue="JUnit.GameUnoTest" />
       </list>
     </recent_temporary>
   </component>
@@ -196,7 +194,7 @@
       <workItem from="1718955654590" duration="5559000" />
       <workItem from="1718965263463" duration="11614000" />
       <workItem from="1718976907907" duration="7554000" />
-      <workItem from="1718984491086" duration="1308000" />
+      <workItem from="1718984491086" duration="1609000" />
     </task>
     <task id="LOCAL-00001" summary="Agregar iconos y imagenes. Intento de actualizar cartas de la máquina.">
       <option name="closed" value="true" />
@@ -342,7 +340,15 @@
       <option name="project" value="LOCAL" />
       <updated>1718984324247</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Se termina el juego UNO.">
+      <option name="closed" value="true" />
+      <created>1718986066399</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1718986066399</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -20,7 +20,7 @@ public class LoseStage extends Stage {
      * @throws IOException if an error occurs while loading the FXML file for the game interface.
      */
     public LoseStage() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/eiscuno/win-view.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/eiscuno/lose-view.fxml"));
         Parent root;
         try {
             root = loader.load();

@@ -41,8 +41,6 @@ public class ThreadEndGame  extends Thread{
                 e.printStackTrace();
             }
             try {
-                System.out.println("Humano ganó: " + gameUno.didHumanWin());
-                System.out.println(gameUno.didMachineWin());
                 if (gameUno.didHumanWin()) {
                     Platform.runLater(() -> {
                         try {
