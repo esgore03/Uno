@@ -40,24 +40,6 @@ public class GameUno implements IGameUno {
     }
 
     /**
-     * Constructs a new instance of GameUno with the specified parameters.
-     * This constructor is intended for unit testing purposes.
-     *
-     * @param humanPlayer   the human player in the game
-     * @param machinePlayer the AI player in the game
-     * @param deck          the deck of Uno cards
-     * @param table         the table where cards are placed during the game
-     */
-    public GameUno(Player humanPlayer, Player machinePlayer, Deck deck, Table table) {
-        this.humanPlayer = humanPlayer;
-        this.machinePlayer = machinePlayer;
-        this.deck = deck;
-        this.table = table;
-        currentTableCardColor = null;
-    }
-
-
-    /**
      * Starts the Uno game.
      */
     @Override

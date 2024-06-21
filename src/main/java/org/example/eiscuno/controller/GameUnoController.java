@@ -2,6 +2,7 @@ package org.example.eiscuno.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -34,6 +35,9 @@ public class GameUnoController {
     BorderPane gameBorderPane;
 
     @FXML
+    private Button backButton;
+
+    @FXML
     private GridPane gridPaneCardsMachine;
 
     @FXML
@@ -56,6 +60,7 @@ public class GameUnoController {
 
     @FXML
     private ImageView tableImageView;
+
     private EventManager eventManager;
     private GameUnoControllerObserver gameUnoObserver;
     private ThreadPlayMachineObserver threadPlayMachineObserver;
@@ -116,7 +121,6 @@ public class GameUnoController {
      * Initializes the variables for the game.
      */
     private void initVariables() {
-        stage = (Stage) this.tableImageView.getScene().getWindow();
         this.eventManager = new EventManager();
         this.gameUnoObserver = new GameUnoControllerObserver();
         this.threadPlayMachineObserver = new ThreadPlayMachineObserver();
@@ -280,6 +284,7 @@ public class GameUnoController {
      * @throws IOException if an error occurs while opening the win stage.
      */
     private void win() throws IOException {
+        this.stage = (Stage) this.backButton.getScene().getWindow();
         this.stage.close();
         WinStage.getInstance();
     }
@@ -289,6 +294,7 @@ public class GameUnoController {
      * @throws IOException if an error occurs while opening the lose stage.
      */
     private void lose() throws IOException{
+        this.stage = (Stage) this.backButton.getScene().getWindow();
         this.stage.close();
         LoseStage.getInstance();
     }

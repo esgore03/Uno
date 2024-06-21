@@ -83,7 +83,7 @@
                   <Image url="@images/button_back.png" />
                </image>
             </ImageView>
-            <Button layoutX="25.0" layoutY="42.0" mnemonicParsing="false" onAction="#onHandleBack" opacity="0.0" prefHeight="22.0" prefWidth="83.0" style="-fx-background-color: red;" textFill="WHITE">
+            <Button fx:id="backButton" layoutX="25.0" layoutY="42.0" mnemonicParsing="false" onAction="#onHandleBack" opacity="0.0" prefHeight="22.0" prefWidth="83.0" style="-fx-background-color: red;" textFill="WHITE">
                <font>
                   <Font name="Berlin Sans FB" size="12.0" />
                </font></Button>
