@@ -77,7 +77,7 @@ public class Deck {
         } else if (name.endsWith("9")) {
             return "9";
         } else if (name.contains("REVERSE")) {
-            return "RESERVE";
+            return "REVERSE";
         } else if (name.contains("TWO_WILD_DRAW")) {
             return "+2";
         } else if (name.equals("FOUR_WILD_DRAW")) {

@@ -1,5 +1,6 @@
 package org.example.eiscuno.model.game;
 
+import org.example.eiscuno.SelectColorDialog;
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.deck.Deck;
 import org.example.eiscuno.model.exception.UnoException;
@@ -15,7 +16,7 @@ public class GameUno implements IGameUno {
     private Player machinePlayer;
     private Deck deck;
     private Table table;
-    private String currentColor;
+    private String currentTableCardColor;
 
     public GameUno(EventManager eventManager, Player humanPlayer, Player machinePlayer, Deck deck, Table table) {
         this.eventManager = eventManager;
@@ -23,7 +24,7 @@ public class GameUno implements IGameUno {
         this.machinePlayer = machinePlayer;
         this.deck = deck;
         this.table = table;
-        this.currentColor = null; // Inicializar currentColor a null
+        currentTableCardColor = null;
     }
 
     @Override
@@ -37,14 +38,20 @@ public class GameUno implements IGameUno {
         }
     }
 
-    @Override
-    public void eatCard(Player player, int numberOfCards) {
+    public void eatCard(String playerWhoEats, int numberOfCards) {
         if(deck.size() < numberOfCards){
             refillDeckOfCards();
         }
 
-        for (int i = 0; i < numberOfCards; i++) {
-            player.addCard(this.deck.takeCard());
+        if(playerWhoEats.equals("MACHINE_PLAYER")){
+            for (int i = 0; i < numberOfCards; i++) {
+                machinePlayer.addCard(this.deck.takeCard());
+            }
+        }
+        else{
+            for (int i = 0; i < numberOfCards; i++) {
+                humanPlayer.addCard(this.deck.takeCard());
+            }
         }
     }
 
@@ -66,34 +73,68 @@ public class GameUno implements IGameUno {
 
     private boolean cardCanBePlayed(Card card, Card currentCard) {
         return card.getColor().equals("NON_COLOR") || card.getValue().equals(currentCard.getValue())
-                || card.getColor().equals(currentColor != null ? currentColor : currentCard.getColor());
+                || card.getColor().equals(currentTableCardColor != null ? currentTableCardColor : currentCard.getColor());
     }
 
     private void applySpecialCardEffect(Card card, String playerWhoPlays) throws UnoException {
-        Player currentPlayer = playerWhoPlays.equals("HUMAN_PLAYER") ? humanPlayer : machinePlayer;
-        Player nextPlayer = playerWhoPlays.equals("HUMAN_PLAYER") ? machinePlayer : humanPlayer;
+        String playerWhoEats;
 
-        switch (card.getValue()) {
-            case "+2":
-                eatCard(nextPlayer, 2);
-                break;
-            case "+4":
-                eatCard(nextPlayer, 4);
-                break;
-            case "SKIP":
-                // No action needed, next player loses turn
-                break;
-            case "REVERSE":
-                // No action needed for 2-player game
-                break;
-            default:
-                break;
+        if (playerWhoPlays.equals("HUMAN_PLAYER")){
+            playerWhoEats = "MACHINE_PLAYER";
+
+            switch (card.getValue()) {
+                case "+2":
+                    currentTableCardColor = card.getColor();
+                    eatCard(playerWhoEats, 2);
+                    eventManager.notifyListenersPlayerTurnUpdate(true);
+                    break;
+                case "+4":
+                    currentTableCardColor = SelectColorDialog.display();
+                    eatCard(playerWhoEats, 4);
+                    eventManager.notifyListenersPlayerTurnUpdate(true);
+                    break;
+                case "SKIP", "REVERSE":
+                    currentTableCardColor = card.getColor();
+                    eventManager.notifyListenersPlayerTurnUpdate(false);
+                    break;
+                case "WILD":
+                    currentTableCardColor = SelectColorDialog.display();
+                    eventManager.notifyListenersPlayerTurnUpdate(true);
+                    break;
+                default:
+                    currentTableCardColor = card.getColor();
+                    eventManager.notifyListenersPlayerTurnUpdate(true);
+                    break;
+            }
         }
-        if (card.isWildCard()) {
-            // Reset current color as the wild card color will be chosen
-            setCurrentColor(null);
-        } else {
-            setCurrentColor(card.getColor());
+        else{
+            playerWhoEats = "HUMAN_PLAYER";
+
+            switch (card.getValue()) {
+                case "+2":
+                    currentTableCardColor = card.getColor();
+                    eatCard(playerWhoEats, 2);
+                    eventManager.notifyListenersPlayerTurnUpdate(false);
+
+                    break;
+                case "+4":
+                    currentTableCardColor = SelectColorDialog.display();
+                    eatCard(playerWhoEats, 4);
+                    eventManager.notifyListenersPlayerTurnUpdate(false);
+                    break;
+                case "SKIP", "REVERSE":
+                    currentTableCardColor = card.getColor();
+                    eventManager.notifyListenersPlayerTurnUpdate(true);
+                    break;
+                case "WILD":
+                    currentTableCardColor = SelectColorDialog.display();
+                    eventManager.notifyListenersPlayerTurnUpdate(false);
+                    break;
+                default:
+                    currentTableCardColor = card.getColor();
+                    eventManager.notifyListenersPlayerTurnUpdate(false);
+                    break;
+            }
         }
     }
 
@@ -173,11 +214,11 @@ public class GameUno implements IGameUno {
         return deck;
     }
 
-    public String getCurrentColor() {
-        return currentColor;
+    public String getCurrentTableCardColor() {
+        return currentTableCardColor;
     }
 
-    public void setCurrentColor(String color) {
-        this.currentColor = color;
+    public void setCurrentTableCardColor(String color) {
+        this.currentTableCardColor = color;
     }
 }

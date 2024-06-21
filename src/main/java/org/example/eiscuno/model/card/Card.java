@@ -42,11 +42,4 @@ public class Card {
         return color;
     }
 
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public boolean isWildCard() {
-        return value.equalsIgnoreCase("WILD") || value.equalsIgnoreCase("WILD_DRAW_FOUR");
-    }
 }

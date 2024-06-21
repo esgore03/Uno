@@ -126,10 +126,8 @@ public class GameUnoController{
 
             cardImageView.setOnMouseClicked((MouseEvent event) -> {
                 if(!playerHasPlayed){
-                    // Aqui deberian verificar si pueden en la tabla jugar esa carta
                     try {
                         gameUno.playCard(card, "HUMAN_PLAYER");
-                        playerHasPlayed = true;
                         tableImageView.setImage(card.getImage());
                         humanPlayer.removeCard(findPosCardsHumanPlayer(card));
                         threadPlayMachine.setHasPlayerPlayed(this.playerHasPlayed);

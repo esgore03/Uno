@@ -71,7 +71,6 @@ public class ThreadPlayMachine extends Thread {
                     putCardOnTheTable();
                 }
 
-                this.machinePlayer.setProtectedByUno(false);
                 eventManager.notifyListenersCardsMachinePlayerUpdate();
             }
         }
