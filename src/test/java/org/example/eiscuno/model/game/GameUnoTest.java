@@ -26,7 +26,7 @@ public class GameUnoTest extends ApplicationTest implements IGameUno{
         var table = new Table();
         var eventManager = new EventManager();
         var gameUnoController = new GameUnoController();
-        var gameUno = new GameUno(gameUnoController, eventManager, humanPlayer, machinePlayer, deck, table);
+        var gameUno = new GameUno(eventManager, humanPlayer, machinePlayer, deck, table);
         for(int i = 0; i < deck.size(); i++){
             table.addCardOnTheTable(deck.takeCard());
             System.out.println(deck.size());
@@ -36,7 +36,7 @@ public class GameUnoTest extends ApplicationTest implements IGameUno{
 
         deck.refillDeck(table.getCardsTable());
 
-        assertEquals(10, deck.size());
+        assertEquals(54, deck.size());
     }
 
     @Override

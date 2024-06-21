@@ -5,11 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1ee8ff40-bbdd-4aec-a3d2-cf5cc45130ec" name="Changes" comment="Se termina el juego UNO.">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/machine/ThreadEndGame.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/org/example/eiscuno/model/deck/DeckTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/controller/GameUnoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/controller/GameUnoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/game/GameUno.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/game/GameUno.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/org/example/eiscuno/model/game/GameUnoTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/example/eiscuno/model/game/GameUnoTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -108,7 +103,7 @@
       <recent name="org.example.eiscuno.model.game" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="JUnit.GameUnoTest">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.eiscuno.Main" />
       <module name="eisc-uno" />
@@ -134,6 +129,8 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="ALTERNATIVE_JRE_PATH" value="corretto-17" />
       <option name="PACKAGE_NAME" value="org.example.eiscuno.model.game" />
       <option name="MAIN_CLASS_NAME" value="org.example.eiscuno.model.game.GameUnoTest" />
       <option name="METHOD_NAME" value="" />
@@ -148,8 +145,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Main" />
         <item itemvalue="JUnit.GameUnoTest" />
+        <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
   </component>
@@ -199,7 +196,7 @@
       <workItem from="1718786255970" duration="538000" />
       <workItem from="1718955654590" duration="5559000" />
       <workItem from="1718965263463" duration="11614000" />
-      <workItem from="1718976907907" duration="6526000" />
+      <workItem from="1718976907907" duration="6925000" />
     </task>
     <task id="LOCAL-00001" summary="Agregar iconos y imagenes. Intento de actualizar cartas de la máquina.">
       <option name="closed" value="true" />
@@ -305,7 +302,23 @@
       <option name="project" value="LOCAL" />
       <updated>1718981965699</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Se termina el juego UNO.">
+      <option name="closed" value="true" />
+      <created>1718983503911</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1718983503911</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Se termina el juego UNO.">
+      <option name="closed" value="true" />
+      <created>1718983749189</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1718983749189</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
