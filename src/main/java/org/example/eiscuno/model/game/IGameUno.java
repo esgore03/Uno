@@ -36,7 +36,7 @@ public interface IGameUno {
     Card[] getCurrentVisibleCardsHumanPlayer(int posInitCardToShow);
 
     /**
-     * Retrieves the current visible cards of the machine player starting from a specific position.
+     * Retrieves the current visible cards of the machine player.
      *
      * @return an array of cards that are currently visible to the human player
      */

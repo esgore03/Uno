@@ -24,11 +24,11 @@ public class GameUno implements IGameUno {
     /**
      * Constructs a new instance of GameUno with the specified parameters.
      *
-     * @param eventManager   the event manager for managing game events
-     * @param humanPlayer    the human player in the game
-     * @param machinePlayer  the AI player in the game
-     * @param deck           the deck of Uno cards
-     * @param table          the table where cards are placed during the game
+     * @param eventManager  the event manager for managing game events
+     * @param humanPlayer   the human player in the game
+     * @param machinePlayer the AI player in the game
+     * @param deck          the deck of Uno cards
+     * @param table         the table where cards are placed during the game
      */
     public GameUno(EventManager eventManager, Player humanPlayer, Player machinePlayer, Deck deck, Table table) {
         this.eventManager = eventManager;
@@ -43,10 +43,10 @@ public class GameUno implements IGameUno {
      * Constructs a new instance of GameUno with the specified parameters.
      * This constructor is intended for unit testing purposes.
      *
-     * @param humanPlayer    the human player in the game
-     * @param machinePlayer  the AI player in the game
-     * @param deck           the deck of Uno cards
-     * @param table          the table where cards are placed during the game
+     * @param humanPlayer   the human player in the game
+     * @param machinePlayer the AI player in the game
+     * @param deck          the deck of Uno cards
+     * @param table         the table where cards are placed during the game
      */
     public GameUno(Player humanPlayer, Player machinePlayer, Deck deck, Table table) {
         this.humanPlayer = humanPlayer;
@@ -57,6 +57,9 @@ public class GameUno implements IGameUno {
     }
 
 
+    /**
+     * Starts the Uno game.
+     */
     @Override
     public void startGame() {
         for (int i = 0; i < 10; i++) {
@@ -71,29 +74,33 @@ public class GameUno implements IGameUno {
     /**
      * Distributes cards from the deck to a player.
      *
-     * @param playerWhoEats  the player who receives the cards (either "MACHINE_PLAYER" or "HUMAN_PLAYER")
-     * @param numberOfCards  the number of cards to distribute
+     * @param playerWhoEats the player who receives the cards (either "MACHINE_PLAYER" or "HUMAN_PLAYER")
+     * @param numberOfCards the number of cards to distribute
      */
     public void eatCard(String playerWhoEats, int numberOfCards) {
-        if(deck.size() < numberOfCards){
+        if (deck.size() < numberOfCards) {
             refillDeckOfCards();
         }
 
-        if(playerWhoEats.equals("MACHINE_PLAYER")){
+        if (playerWhoEats.equals("MACHINE_PLAYER")) {
             for (int i = 0; i < numberOfCards; i++) {
                 machinePlayer.addCard(this.deck.takeCard());
             }
-        }
-        else{
+        } else {
             for (int i = 0; i < numberOfCards; i++) {
                 humanPlayer.addCard(this.deck.takeCard());
             }
         }
     }
 
+    /**
+     * Plays a card in the game, adding it to the table.
+     *
+     * @param card the card to be played
+     */
     @Override
     public void playCard(Card card, String playerWhoPlays) throws UnoException {
-        if(!didHumanWin() && !didMachineWin()){
+        if (!didHumanWin() && !didMachineWin()) {
             if (table.isEmpty()) {
                 this.table.addCardOnTheTable(card);
                 applySpecialCardEffect(card, playerWhoPlays);
@@ -112,8 +119,8 @@ public class GameUno implements IGameUno {
     /**
      * Checks if a card can be played.
      *
-     * @param card         the card to be played
-     * @param currentCard  the current card on the table
+     * @param card        the card to be played
+     * @param currentCard the current card on the table
      * @return true if the card can be played, false otherwise
      */
     private boolean cardCanBePlayed(Card card, Card currentCard) {
@@ -131,7 +138,7 @@ public class GameUno implements IGameUno {
     private void applySpecialCardEffect(Card card, String playerWhoPlays) throws UnoException {
         String playerWhoEats;
 
-        if (playerWhoPlays.equals("HUMAN_PLAYER")){
+        if (playerWhoPlays.equals("HUMAN_PLAYER")) {
             playerWhoEats = "MACHINE_PLAYER";
 
             switch (card.getValue()) {
@@ -159,8 +166,7 @@ public class GameUno implements IGameUno {
                     eventManager.notifyListenersPlayerTurnUpdate(true);
                     break;
             }
-        }
-        else{
+        } else {
             playerWhoEats = "HUMAN_PLAYER";
 
             switch (card.getValue()) {
@@ -191,6 +197,11 @@ public class GameUno implements IGameUno {
         }
     }
 
+    /**
+     * Handles the action when a player shouts "Uno".
+     *
+     * @param playerWhoSang the identifier of the player who shouted "Uno"
+     */
     @Override
     public void haveSungOne(String playerWhoSang) {
         boolean machinePlayerProtectedByUno = this.machinePlayer.isProtectedByUno();
@@ -200,15 +211,13 @@ public class GameUno implements IGameUno {
             if (machinePlayer.getCardsPlayer().size() == 1 && !machinePlayerProtectedByUno) {
                 machinePlayer.addCard(this.deck.takeCard());
                 eventManager.notifyListenersCardsMachinePlayerUpdate();
-            }
-            else if (humanPlayer.getCardsPlayer().size() == 1){
+            } else if (humanPlayer.getCardsPlayer().size() == 1) {
                 this.humanPlayer.setProtectedByUno(true);
-            }
-            else {
+            } else {
                 System.out.println("Can't sing UNO.");
             }
         } else {
-            if(!humanPlayerProtectedByUno){
+            if (!humanPlayerProtectedByUno) {
                 humanPlayer.addCard(this.deck.takeCard());
                 eventManager.notifyListenersCardsHumanPlayerUpdate();
             }
@@ -231,6 +240,12 @@ public class GameUno implements IGameUno {
         }
     }
 
+    /**
+     * Retrieves the current visible cards of the human player starting from a specific position.
+     *
+     * @param posInitCardToShow the starting position of the cards to be shown
+     * @return an array of cards that are currently visible to the human player
+     */
     @Override
     public Card[] getCurrentVisibleCardsHumanPlayer(int posInitCardToShow) {
         int totalCards = this.humanPlayer.getCardsPlayer().size();
@@ -244,6 +259,11 @@ public class GameUno implements IGameUno {
         return cards;
     }
 
+    /**
+     * Retrieves the current visible cards of the machine player.
+     *
+     * @return an array of cards that are currently visible to the human player
+     */
     @Override
     public Card[] getCurrentVisibleCardsMachinePlayer() {
         int totalCards = this.machinePlayer.getCardsPlayer().size();
@@ -257,11 +277,21 @@ public class GameUno implements IGameUno {
         return cards;
     }
 
+    /**
+     * Checks if the Human Player won.
+     *
+     * @return true if he did, false otherwise
+     */
     @Override
     public Boolean didHumanWin() {
         return humanPlayer.getCardsPlayer().isEmpty();
     }
 
+    /**
+     * Checks if the Machine Player won.
+     *
+     * @return true if he did, false otherwise
+     */
     @Override
     public Boolean didMachineWin() {
         return machinePlayer.getCardsPlayer().isEmpty();

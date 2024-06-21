@@ -38,6 +38,11 @@ public class GameUnoControllerObserver implements EventListener {
         Platform.runLater(() -> gameUnoController.printCardsHumanPlayer());
     }
 
+    /**
+     * Sets the GameUnoController instance for this observer.
+     *
+     * @param gameUnoController the GameUnoController instance to set
+     */
     public void setGameUnoController(GameUnoController gameUnoController) {
         this.gameUnoController = gameUnoController;
     }
