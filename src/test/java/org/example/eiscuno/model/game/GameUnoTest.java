@@ -20,13 +20,8 @@ public class GameUnoTest extends ApplicationTest implements IGameUno{
 
     @Test
     void deckShouldBeRefilled(){
-        var humanPlayer = new Player("HUMAN_PLAYER");
-        var machinePlayer = new Player("MACHINE_PLAYER");
         var deck = new Deck();
         var table = new Table();
-        var eventManager = new EventManager();
-        var gameUnoController = new GameUnoController();
-        var gameUno = new GameUno(eventManager, humanPlayer, machinePlayer, deck, table);
         for(int i = 0; i < deck.size(); i++){
             table.addCardOnTheTable(deck.takeCard());
             System.out.println(deck.size());
