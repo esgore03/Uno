@@ -17,7 +17,7 @@ import org.example.eiscuno.model.machine.ThreadSingUNOMachine;
 import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
 import org.example.eiscuno.model.unoenum.EISCUnoEnum;
-import org.example.eiscuno.model.observer.GameUnoObserver;
+import org.example.eiscuno.model.observer.GameUnoControllerObserver;
 import org.example.eiscuno.view.GameUnoStage;
 
 /**
@@ -51,7 +51,7 @@ public class GameUnoController{
     @FXML
     private ImageView tableImageView;
     private EventManager eventManager;
-    private GameUnoObserver gameUnoObserver;
+    private GameUnoControllerObserver gameUnoObserver;
     private Player humanPlayer;
     private Player machinePlayer;
     private Deck deck;
@@ -75,7 +75,7 @@ public class GameUnoController{
         printCardsHumanPlayer();
         printCardsMachinePlayer();
 
-        threadSingUNOMachine = new ThreadSingUNOMachine(this.humanPlayer.getCardsPlayer(), gameUno);
+        threadSingUNOMachine = new ThreadSingUNOMachine(this.humanPlayer.getCardsPlayer(), this.machinePlayer, gameUno);
         Thread t = new Thread(threadSingUNOMachine, "ThreadSingUNO");
         t.start();
 
@@ -102,7 +102,7 @@ public class GameUnoController{
      */
     private void initVariables() {
         this.eventManager = new EventManager();
-        this.gameUnoObserver = new GameUnoObserver(this);
+        this.gameUnoObserver = new GameUnoControllerObserver(this);
         eventManager.addListener(this.gameUnoObserver);
         this.humanPlayer = new Player("HUMAN_PLAYER");
         this.machinePlayer = new Player("MACHINE_PLAYER");
@@ -216,7 +216,7 @@ public class GameUnoController{
     void onHandleTakeCard(ActionEvent event) {
         if(!playerHasPlayed) {
             try {
-                gameUno.takeCard("HUMAN_PLAYER");
+                gameUno.takeCardPlayer("HUMAN_PLAYER");
                 printCardsHumanPlayer();
                 playerHasPlayed = true;
                 threadPlayMachine.setHasPlayerPlayed(this.playerHasPlayed);

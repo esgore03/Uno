@@ -7,7 +7,7 @@ import org.example.eiscuno.controller.GameUnoController;
  * This class implements the EventListener interface to observe game events in the Uno game.
  * It updates the corresponding methods in GameUnoController using JavaFX Platform for UI updates.
  */
-public class GameUnoObserver implements EventListener {
+public class GameUnoControllerObserver implements EventListener {
     private GameUnoController gameUnoController;
 
     /**
@@ -15,7 +15,7 @@ public class GameUnoObserver implements EventListener {
      *
      * @param gameUnoController the controller for managing Uno game events
      */
-    public GameUnoObserver(GameUnoController gameUnoController) {
+    public GameUnoControllerObserver(GameUnoController gameUnoController) {
         this.gameUnoController = gameUnoController;
     }
 

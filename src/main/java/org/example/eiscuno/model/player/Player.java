@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class Player implements IPlayer {
     private ArrayList<Card> cardsPlayer;
     private String typePlayer;
+    private volatile boolean isProtectedByUno;
 
     /**
      * Constructs a new Player object with an empty hand of cards.
@@ -17,6 +18,7 @@ public class Player implements IPlayer {
     public Player(String typePlayer){
         this.cardsPlayer = new ArrayList<Card>();
         this.typePlayer = typePlayer;
+        this.isProtectedByUno = false;
     };
 
     /**
@@ -62,5 +64,13 @@ public class Player implements IPlayer {
 
     public String getTypePlayer() {
         return typePlayer;
+    }
+
+    public void setProtectedByUno(boolean protectedByUno) {
+        isProtectedByUno = protectedByUno;
+    }
+
+    public boolean isProtectedByUno() {
+        return isProtectedByUno;
     }
 }

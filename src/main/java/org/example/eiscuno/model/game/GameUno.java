@@ -39,6 +39,10 @@ public class GameUno implements IGameUno {
 
     @Override
     public void eatCard(Player player, int numberOfCards) {
+        if(deck.size() < numberOfCards){
+            refillDeckOfCards();
+        }
+
         for (int i = 0; i < numberOfCards; i++) {
             player.addCard(this.deck.takeCard());
         }
@@ -95,24 +99,35 @@ public class GameUno implements IGameUno {
 
     @Override
     public void haveSungOne(String playerWhoSang) {
+        boolean machinePlayerProtectedByUno = this.machinePlayer.isProtectedByUno();
+        boolean humanPlayerProtectedByUno = this.humanPlayer.isProtectedByUno();
+
         if (playerWhoSang.equals("HUMAN_PLAYER")) {
-            if (machinePlayer.getCardsPlayer().size() == 1) {
+            if (machinePlayer.getCardsPlayer().size() == 1 && !machinePlayerProtectedByUno) {
                 machinePlayer.addCard(this.deck.takeCard());
                 eventManager.notifyListenersCardsMachinePlayerUpdate();
-            } else {
+            }
+            else if (humanPlayer.getCardsPlayer().size() == 1){
+                this.humanPlayer.setProtectedByUno(true);
+            }
+            else {
                 System.out.println("Can't sing UNO.");
             }
         } else {
-            humanPlayer.addCard(this.deck.takeCard());
-            eventManager.notifyListenersCardsHumanPlayerUpdate();
+            if(!humanPlayerProtectedByUno){
+                humanPlayer.addCard(this.deck.takeCard());
+                eventManager.notifyListenersCardsHumanPlayerUpdate();
+            }
         }
     }
 
-    public void takeCard(String playerWhoTakes) {
+    public void takeCardPlayer(String playerWhoTakes) {
         if (playerWhoTakes.equals("HUMAN_PLAYER")) {
-            humanPlayer.addCard(this.deck.takeCard());
+            this.humanPlayer.addCard(this.deck.takeCard());
+            this.humanPlayer.setProtectedByUno(false);
         } else {
-            machinePlayer.addCard(this.deck.takeCard());
+            this.machinePlayer.addCard(this.deck.takeCard());
+            this.machinePlayer.setProtectedByUno(false);
         }
     }
 

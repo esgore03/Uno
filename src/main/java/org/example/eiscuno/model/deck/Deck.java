@@ -125,6 +125,15 @@ public class Deck {
     }
 
     /**
+     * Returns the number of cards in the deck.
+     *
+     * @return the number of cards in the deck
+     */
+    public int size(){
+        return deckOfCards.size();
+    }
+
+    /**
      * Checks if the deck is empty.
      *
      * @return true if the deck is empty, false otherwise.

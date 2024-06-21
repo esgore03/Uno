@@ -71,8 +71,7 @@ public class ThreadPlayMachine extends Thread {
                     putCardOnTheTable();
                 }
 
-                hasPlayerPlayed = false;
-                eventManager.notifyListenersPlayerTurnUpdate(hasPlayerPlayed);
+                this.machinePlayer.setProtectedByUno(false);
                 eventManager.notifyListenersCardsMachinePlayerUpdate();
             }
         }
@@ -91,7 +90,6 @@ public class ThreadPlayMachine extends Thread {
      * If a card cannot be placed due to an {@link UnoException}, it continues to the next card.
      */
     private void putCardOnTheTable() {
-        System.out.println("Machine player placed a card.");
         ArrayList<Card> cardsMachinePlayer = machinePlayer.getCardsPlayer();
         boolean validPlacement = false;
 
@@ -99,6 +97,7 @@ public class ThreadPlayMachine extends Thread {
             try {
                 Card card = machinePlayer.getCardsPlayer().get(cardIndex);
                 gameUno.playCard(card, "MACHINE_PLAYER");
+                System.out.println("Machine player placed a card.");
                 machinePlayer.removeCard(cardIndex);
                 tableImageView.setImage(card.getImage());
                 validPlacement = true;
@@ -127,8 +126,10 @@ public class ThreadPlayMachine extends Thread {
 
         while (!cardTaken) {
             try {
-                gameUno.takeCard("MACHINE_PLAYER");
+                gameUno.takeCardPlayer("MACHINE_PLAYER");
                 System.out.println("Machine player took a card.");
+                hasPlayerPlayed = false;
+                eventManager.notifyListenersPlayerTurnUpdate(hasPlayerPlayed);
                 cardTaken = true;
             } catch (IllegalStateException ignored) {
             }
