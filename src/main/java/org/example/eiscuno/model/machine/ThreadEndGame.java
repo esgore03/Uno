@@ -1,5 +1,6 @@
 package org.example.eiscuno.model.machine;
 
+import javafx.application.Platform;
 import org.example.eiscuno.controller.GameUnoController;
 import org.example.eiscuno.model.game.GameUno;
 
@@ -22,18 +23,28 @@ public class ThreadEndGame  extends Thread{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            try{
+            try {
                 System.out.println("Humano ganó: " + gameUno.didHumanWin());
                 System.out.println(gameUno.didMachineWin());
-                if(gameUno.didHumanWin()){
-                    System.out.println("Humano ganó: " + gameUno.didHumanWin());
-                    gameUnoController.win();
+                if (gameUno.didHumanWin()) {
+                    Platform.runLater(() -> {
+                        try {
+                            gameUnoController.win();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+                } else if (gameUno.didMachineWin()) {
+                    Platform.runLater(() -> {
+                        try {
+                            gameUnoController.lose();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
                 }
-                else if(gameUno.didMachineWin()){
-                    gameUnoController.lose();
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }

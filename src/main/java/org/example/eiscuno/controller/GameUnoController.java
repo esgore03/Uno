@@ -281,6 +281,8 @@ public class GameUnoController {
      * @throws IOException if an error occurs while opening the win stage.
      */
     public void win() throws IOException {
+        this.stage = (Stage) this.backButton.getScene().getWindow();
+        this.stage.close();
         WinStage.getInstance();
     }
 
@@ -289,6 +291,8 @@ public class GameUnoController {
      * @throws IOException if an error occurs while opening the lose stage.
      */
     public void lose() throws IOException{
+        this.stage = (Stage) this.backButton.getScene().getWindow();
+        this.stage.close();
         LoseStage.getInstance();
     }
 
