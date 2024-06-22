@@ -2,7 +2,6 @@ package org.example.eiscuno.model.game;
 
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.exception.UnoException;
-import org.example.eiscuno.model.player.Player;
 
 /**
  * Interface representing the Uno game functionality.
@@ -13,14 +12,6 @@ public interface IGameUno {
      * Starts the Uno game.
      */
     void startGame();
-
-    /**
-     * Makes a player draw a specified number of cards from the deck.
-     *
-     * @param player the player who will draw the cards
-     * @param numberOfCards the number of cards to be drawn
-     */
-    void eatCard(Player player, int numberOfCards);
 
     /**
      * Plays a card in the game, adding it to the table.
@@ -45,17 +36,23 @@ public interface IGameUno {
     Card[] getCurrentVisibleCardsHumanPlayer(int posInitCardToShow);
 
     /**
-     * Retrieves the current visible cards of the machine player starting from a specific position.
+     * Retrieves the current visible cards of the machine player.
      *
-     * @param posInitCardToShow the starting position of the cards to be shown
      * @return an array of cards that are currently visible to the human player
      */
     Card[] getCurrentVisibleCardsMachinePlayer();
 
     /**
-     * Checks if the game is over.
+     * Checks if the Human Player won.
      *
-     * @return true if the game is over, false otherwise
+     * @return true if he did, false otherwise
      */
-    Boolean isGameOver();
+    Boolean didHumanWin();
+
+    /**
+     * Checks if the Machine Player won.
+     *
+     * @return true if he did, false otherwise
+     */
+    Boolean didMachineWin();
 }

@@ -4,20 +4,22 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
- * Represents a card in the Uno game.
+ * Represents a playing card in the Uno game.
+ * Each card has a URL for its image, a value (such as number or special card), and a color.
  */
 public class Card {
-    private String url;
-    private String value;
-    private String color;
-    private Image image;
-    private ImageView cardImageView;
+    private String url; // The URL of the card's image
+    private String value; // The value of the card (e.g., number, special card value)
+    private String color; // The color of the card
+    private Image image; // The JavaFX Image object representing the card's image
+    private ImageView cardImageView; // The JavaFX ImageView object for displaying the card's image
 
     /**
-     * Constructs a Card with the specified image URL and name.
+     * Constructs a new Card object with the specified URL, value, and color.
      *
-     * @param url the URL of the card image
-     * @param value of the card
+     * @param url    the URL of the card's image
+     * @param value  the value of the card
+     * @param color  the color of the card
      */
     public Card(String url, String value, String color) {
         this.url = url;
@@ -28,9 +30,9 @@ public class Card {
     }
 
     /**
-     * Creates and configures the ImageView for the card.
+     * Creates a JavaFX ImageView object for the card's image with predefined settings.
      *
-     * @return the configured ImageView of the card
+     * @return the ImageView object for the card's image
      */
     private ImageView createCardImageView() {
         ImageView card = new ImageView(this.image);
@@ -41,47 +43,38 @@ public class Card {
     }
 
     /**
-     * Gets the ImageView representation of the card.
+     * Retrieves the JavaFX ImageView object for displaying the card's image.
      *
-     * @return the ImageView of the card
+     * @return the ImageView object for the card's image
      */
     public ImageView getCard() {
         return cardImageView;
     }
 
     /**
-     * Gets the image of the card.
+     * Retrieves the JavaFX Image object representing the card's image.
      *
-     * @return the Image of the card
+     * @return the Image object for the card's image
      */
     public Image getImage() {
         return image;
     }
 
     /**
-     * Gets the value of the card.
+     * Retrieves the value of the card.
      *
-     * @return the value of the card as a string
+     * @return the value of the card
      */
     public String getValue() {
         return value;
     }
 
     /**
-     * Gets the color of the card.
+     * Retrieves the color of the card.
      *
-     * @return the color of the card as a string
+     * @return the color of the card
      */
     public String getColor() {
         return color;
-    }
-
-    /**
-     * Sets the color of the card.
-     *
-     * @param color the color to be set for the card
-     */
-    public void setColor(String color) {
-        this.color = color;
     }
 }

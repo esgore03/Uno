@@ -54,4 +54,11 @@ public class Table {
     public ArrayList<Card> getCardsTable() {
         return cardsTable;
     }
+
+    /**
+     * Sets the starting card of the table.
+     */
+    public void setStartCard(Card card) {
+        this.cardsTable.add(card);
+    }
 }

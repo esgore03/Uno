@@ -2,11 +2,14 @@ package org.example.eiscuno.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 import org.example.eiscuno.model.exception.UnoException;
+import org.example.eiscuno.model.machine.ThreadEndGame;
 import org.example.eiscuno.model.machine.ThreadRefillDeck;
 import org.example.eiscuno.model.observer.EventManager;
 import org.example.eiscuno.model.card.Card;
@@ -14,18 +17,26 @@ import org.example.eiscuno.model.deck.Deck;
 import org.example.eiscuno.model.game.GameUno;
 import org.example.eiscuno.model.machine.ThreadPlayMachine;
 import org.example.eiscuno.model.machine.ThreadSingUNOMachine;
+import org.example.eiscuno.model.observer.ThreadPlayMachineObserver;
 import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
 import org.example.eiscuno.model.unoenum.EISCUnoEnum;
-import org.example.eiscuno.model.observer.GameUnoObserver;
+import org.example.eiscuno.model.observer.GameUnoControllerObserver;
+import org.example.eiscuno.view.LoseStage;
+import org.example.eiscuno.view.WinStage;
 import org.example.eiscuno.view.GameUnoStage;
+
+import java.io.IOException;
 
 /**
  * Controller class for the Uno game.
  */
-public class GameUnoController{
+public class GameUnoController {
     @FXML
     BorderPane gameBorderPane;
+
+    @FXML
+    private Button backButton;
 
     @FXML
     private GridPane gridPaneCardsMachine;
@@ -37,12 +48,23 @@ public class GameUnoController{
     private ImageView deckButtonImageView;
 
     @FXML
+    private ImageView exitButtonImageView;
+
+    @FXML
+    private ImageView backButtonImageView;
+
+    @FXML
+    private ImageView nextButtonImageView;
+
+    @FXML
     private ImageView unoButtonImageView;
 
     @FXML
     private ImageView tableImageView;
+
     private EventManager eventManager;
-    private GameUnoObserver gameUnoObserver;
+    private GameUnoControllerObserver gameUnoObserver;
+    private ThreadPlayMachineObserver threadPlayMachineObserver;
     private Player humanPlayer;
     private Player machinePlayer;
     private Deck deck;
@@ -50,9 +72,11 @@ public class GameUnoController{
     private GameUno gameUno;
     private int posInitCardToShow;
     private boolean playerHasPlayed;
+    private Stage stage;
     private ThreadSingUNOMachine threadSingUNOMachine;
     private ThreadPlayMachine threadPlayMachine;
     private ThreadRefillDeck threadRefillDeck;
+    private ThreadEndGame threadEndGame;
 
     /**
      * Initializes the controller.
@@ -62,24 +86,40 @@ public class GameUnoController{
         setVisuals();
 
         initVariables();
+
         this.gameUno.startGame();
         printCardsHumanPlayer();
         printCardsMachinePlayer();
 
-        threadSingUNOMachine = new ThreadSingUNOMachine(this.humanPlayer.getCardsPlayer(), gameUno);
-        Thread t = new Thread(threadSingUNOMachine, "ThreadSingUNO");
-        t.start();
-
         threadPlayMachine = new ThreadPlayMachine(this.eventManager, this.gameUno, this.machinePlayer, this.tableImageView);
         threadPlayMachine.start();
 
+        threadSingUNOMachine = new ThreadSingUNOMachine(this.humanPlayer.getCardsPlayer(), this.machinePlayer, gameUno);
+        Thread t = new Thread(threadSingUNOMachine, "ThreadSingUNO");
+        t.start();
+
         threadRefillDeck = new ThreadRefillDeck(this.gameUno);
         threadRefillDeck.start();
+
+        threadEndGame = new ThreadEndGame(this, this.gameUno);
+        threadEndGame.start();
+
+        gameUnoObserver.setGameUnoController(this);
+        threadPlayMachineObserver.setThreadPlayMachine(threadPlayMachine);
     }
 
+    /**
+     * Initializes the visuals of the game.
+     */
     private void setVisuals(){
+        String imageUrl = String.valueOf(getClass().getResource(EISCUnoEnum.BACKGROUND_UNO.getFilePath()));
+        String style = "-fx-background-image: url('" + imageUrl + "'); " + "-fx-background-size: cover;";
         deckButtonImageView.setImage(new Image(String.valueOf(getClass().getResource(EISCUnoEnum.DECK_OF_CARDS.getFilePath()))));
+        exitButtonImageView.setImage(new Image(String.valueOf(getClass().getResource(EISCUnoEnum.BUTTON_EXIT.getFilePath()))));
+        backButtonImageView.setImage(new Image(String.valueOf(getClass().getResource(EISCUnoEnum.BUTTON_BACK.getFilePath()))));
+        nextButtonImageView.setImage(new Image(String.valueOf(getClass().getResource(EISCUnoEnum.BUTTON_NEXT.getFilePath()))));
         unoButtonImageView.setImage(new Image(String.valueOf(getClass().getResource(EISCUnoEnum.BUTTON_UNO.getFilePath()))));
+        gameBorderPane.setStyle(style);
     }
 
     /**
@@ -87,13 +127,15 @@ public class GameUnoController{
      */
     private void initVariables() {
         this.eventManager = new EventManager();
-        this.gameUnoObserver = new GameUnoObserver(this);
+        this.gameUnoObserver = new GameUnoControllerObserver();
+        this.threadPlayMachineObserver = new ThreadPlayMachineObserver();
         eventManager.addListener(this.gameUnoObserver);
+        eventManager.addListener(this.threadPlayMachineObserver);
         this.humanPlayer = new Player("HUMAN_PLAYER");
         this.machinePlayer = new Player("MACHINE_PLAYER");
         this.deck = new Deck();
         this.table = new Table();
-        this.gameUno = new GameUno(this. eventManager, this.humanPlayer, this.machinePlayer, this.deck, this.table);
+        this.gameUno = new GameUno(this.eventManager, this.humanPlayer, this.machinePlayer, this.deck, this.table);
         this.posInitCardToShow = 0;
         this.playerHasPlayed = false;
     }
@@ -111,17 +153,15 @@ public class GameUnoController{
 
             cardImageView.setOnMouseClicked((MouseEvent event) -> {
                 if(!playerHasPlayed){
-                    // Aqui deberian verificar si pueden en la tabla jugar esa carta
                     try {
                         gameUno.playCard(card, "HUMAN_PLAYER");
-                        playerHasPlayed = true;
+                        System.out.println("Human player placed a card.");
                         tableImageView.setImage(card.getImage());
                         humanPlayer.removeCard(findPosCardsHumanPlayer(card));
-                        threadPlayMachine.setHasPlayerPlayed(this.playerHasPlayed);
                         printCardsHumanPlayer();
                     } catch (UnoException e){
                         System.out.println(e.getMessage());
-                    };
+                    }
                 }
                 else{
                     System.out.println("It's not your turn.");
@@ -130,7 +170,7 @@ public class GameUnoController{
 
             this.gridPaneCardsPlayer.add(cardImageView, i, 0);
         }
-        System.out.println("\nNumber of cards human player: " + humanPlayer.getCardsPlayer().size());
+        System.out.println("Number of cards human player: " + humanPlayer.getCardsPlayer().size());
     }
 
     /**
@@ -201,8 +241,9 @@ public class GameUnoController{
     void onHandleTakeCard(ActionEvent event) {
         if(!playerHasPlayed) {
             try {
-                gameUno.takeCard("HUMAN_PLAYER");
+                gameUno.takeCardPlayer("HUMAN_PLAYER");
                 printCardsHumanPlayer();
+                System.out.println("Human player took a card.");
                 playerHasPlayed = true;
                 threadPlayMachine.setHasPlayerPlayed(this.playerHasPlayed);
             } catch (IllegalStateException e) {
@@ -233,6 +274,26 @@ public class GameUnoController{
     @FXML
     void onExitButtonClick(ActionEvent event){
         GameUnoStage.deleteInstance();
+    }
+
+    /**
+     * Closes the current stage and opens the win stage.
+     * @throws IOException if an error occurs while opening the win stage.
+     */
+    public void win() throws IOException {
+        this.stage = (Stage) this.backButton.getScene().getWindow();
+        this.stage.close();
+        WinStage.getInstance();
+    }
+
+    /**
+     * Closes the current stage and opens the lose stage.
+     * @throws IOException if an error occurs while opening the lose stage.
+     */
+    public void lose() throws IOException{
+        this.stage = (Stage) this.backButton.getScene().getWindow();
+        this.stage.close();
+        LoseStage.getInstance();
     }
 
     /**

@@ -77,7 +77,7 @@ public class Deck {
         } else if (name.endsWith("9")) {
             return "9";
         } else if (name.contains("REVERSE")) {
-            return "RESERVE";
+            return "REVERSE";
         } else if (name.contains("TWO_WILD_DRAW")) {
             return "+2";
         } else if (name.equals("FOUR_WILD_DRAW")) {
@@ -122,6 +122,15 @@ public class Deck {
             throw new IllegalStateException("Deck is empty. Wait for it to be refilled.");
         }
         return deckOfCards.pop();
+    }
+
+    /**
+     * Returns the number of cards in the deck.
+     *
+     * @return the number of cards in the deck
+     */
+    public int size(){
+        return deckOfCards.size();
     }
 
     /**

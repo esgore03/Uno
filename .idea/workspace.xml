@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1ee8ff40-bbdd-4aec-a3d2-cf5cc45130ec" name="Changes" comment="Se implementa nuevo código para la inicialización de las cartas. Se hacen los respectivos cambios a la lógica de playCard() para soportarlos.">
+    <list default="true" id="1ee8ff40-bbdd-4aec-a3d2-cf5cc45130ec" name="Changes" comment="Se termina el juego UNO.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/deck/Deck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/deck/Deck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/eiscuno/model/deck/DeckTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/example/eiscuno/model/deck/DeckTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/eiscuno/model/game/GameUnoTest.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,6 +21,7 @@
         <option value="Enum" />
         <option value="CSS File" />
         <option value="Interface" />
+        <option value="JUnit5 Test Class" />
         <option value="Class" />
       </list>
     </option>
@@ -60,33 +62,49 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Application.HelloApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;jmga&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/fsvc1/Downloads/eisc-uno-9447407b856a4f593bd96d95eecff3c38250f94f/eisc-uno-9447407b856a4f593bd96d95eecff3c38250f94f&quot;,
-    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Application.HelloApplication.executor": "Run",
+    "Application.Main.executor": "Run",
+    "JUnit.DeckTest.executor": "Run",
+    "JUnit.GameUnoTest.executor": "Run",
+    "JUnit.TableTest.executor": "Run",
+    "Maven.eisc-uno [org.apache.maven.plugins:maven-surefire-plugin:2.22.2:help].executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "git-widget-placeholder": "jmga",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "A:/IntelliJProyectos/Uno/src/main/resources/org/example/eiscuno",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.repository.indices",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="A:\IntelliJProyectos\Uno\src\main\resources\org\example\eiscuno" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="A:\IntelliJProyectos\Uno\src\main\resources\org\example\eiscuno\cards-uno" />
       <recent name="C:\Users\fsvc1\Coding\eisc-uno\src\main\resources\org\example\eiscuno" />
       <recent name="C:\Users\fsvc1\Coding\eisc-uno\src\main\resources\org\example\eiscuno\images" />
       <recent name="C:\Users\fsvc1\Coding\eisc-uno\src" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="org.example.eiscuno.model.deck" />
+      <recent name="org.example.eiscuno.model.game" />
     </key>
   </component>
   <component name="RunManager">
@@ -103,9 +121,31 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="GameUnoTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="eisc-uno" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.eiscuno.model.game.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="ALTERNATIVE_JRE_PATH" value="corretto-17" />
+      <option name="PACKAGE_NAME" value="org.example.eiscuno.model.game" />
+      <option name="MAIN_CLASS_NAME" value="org.example.eiscuno.model.game.GameUnoTest" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.Main" />
+      <item itemvalue="JUnit.GameUnoTest" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
+        <item itemvalue="JUnit.GameUnoTest" />
       </list>
     </recent_temporary>
   </component>
@@ -153,6 +193,10 @@
       <workItem from="1718744896573" duration="412000" />
       <workItem from="1718763823767" duration="183000" />
       <workItem from="1718786255970" duration="538000" />
+      <workItem from="1718955654590" duration="5559000" />
+      <workItem from="1718965263463" duration="11614000" />
+      <workItem from="1718976907907" duration="7554000" />
+      <workItem from="1718984491086" duration="2246000" />
     </task>
     <task id="LOCAL-00001" summary="Agregar iconos y imagenes. Intento de actualizar cartas de la máquina.">
       <option name="closed" value="true" />
@@ -202,7 +246,127 @@
       <option name="project" value="LOCAL" />
       <updated>1718764000979</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Se implementa nuevo código para la inicialización de las cartas. Se hacen los respectivos cambios a la lógica de playCard() para soportarlos.">
+      <option name="closed" value="true" />
+      <created>1718955088039</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1718955088039</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Se implementa protección contra UNO y avances en los poderes de las cartas.">
+      <option name="closed" value="true" />
+      <created>1718960856973</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1718960856973</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Se implementa protección contra UNO y avances en los poderes de las cartas.">
+      <option name="closed" value="true" />
+      <created>1718969455906</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1718969455906</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Se termina el juego UNO.">
+      <option name="closed" value="true" />
+      <created>1718978468419</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1718978468419</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Se termina el juego UNO.">
+      <option name="closed" value="true" />
+      <created>1718978805006</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1718978805006</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Se termina el juego UNO.">
+      <option name="closed" value="true" />
+      <created>1718979631134</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1718979631134</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Se termina el juego UNO.">
+      <option name="closed" value="true" />
+      <created>1718981965699</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1718981965699</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Se termina el juego UNO.">
+      <option name="closed" value="true" />
+      <created>1718983503911</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1718983503911</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Se termina el juego UNO.">
+      <option name="closed" value="true" />
+      <created>1718983749189</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1718983749189</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Se termina el juego UNO.">
+      <option name="closed" value="true" />
+      <created>1718984140936</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1718984140936</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Se termina el juego UNO.">
+      <option name="closed" value="true" />
+      <created>1718984235235</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1718984235235</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Se termina el juego UNO.">
+      <option name="closed" value="true" />
+      <created>1718984324247</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1718984324247</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Se termina el juego UNO.">
+      <option name="closed" value="true" />
+      <created>1718986066399</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1718986066399</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Se termina el juego UNO.">
+      <option name="closed" value="true" />
+      <created>1718986260986</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1718986260986</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Se termina el juego UNO.">
+      <option name="closed" value="true" />
+      <created>1718986468962</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1718986468962</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -214,6 +378,24 @@
     <MESSAGE value="Avances en lógica del juego" />
     <MESSAGE value="Se termina lógica para tomar, decir UNO y funcionamiento de los threads que simulan la máquina." />
     <MESSAGE value="Se implementa nuevo código para la inicialización de las cartas. Se hacen los respectivos cambios a la lógica de playCard() para soportarlos." />
-    <option name="LAST_COMMIT_MESSAGE" value="Se implementa nuevo código para la inicialización de las cartas. Se hacen los respectivos cambios a la lógica de playCard() para soportarlos." />
+    <MESSAGE value="Se implementa protección contra UNO y avances en los poderes de las cartas." />
+    <MESSAGE value="Se termina el juego UNO." />
+    <option name="LAST_COMMIT_MESSAGE" value="Se termina el juego UNO." />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/game/GameUno.java</url>
+          <line>221</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/game/GameUno.java</url>
+          <line>194</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
